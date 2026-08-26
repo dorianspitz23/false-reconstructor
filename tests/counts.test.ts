@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { SOUND_CHANGE_COUNT, stagesFor } from '../src/engine'
+import { reconstruct, SOUND_CHANGE_COUNT, stagesFor } from '../src/engine'
 
 /**
  * The rule count is quoted in prose in three places. The app derives its own
@@ -33,6 +33,24 @@ describe('the quoted rule count matches the ruleset', () => {
     const quoted = card.match(/(\d+) real sound laws/)?.[1]
     expect(quoted, 'social card no longer states the count').toBeDefined()
     expect(Number(quoted)).toBe(SOUND_CHANGE_COUNT)
+  })
+
+  it('matches the derivation printed on the social card', () => {
+    // The card is a hand-built HTML file rendered to a PNG, and it is the first
+    // thing anyone sees when the link is shared. A sound-change edit that moves
+    // `flarn` would leave it advertising a derivation the engine no longer
+    // produces, with nothing to notice but someone's eye.
+    const card = read('scripts/social-card.html')
+    const printed = [...card.matchAll(/<div class="form">.*?¶<\/span>(.*?)<\/div>/gs)].map((m) =>
+      m[1]!.replace(/<[^>]+>/g, '').trim(),
+    )
+    expect(printed.length, 'card no longer lists forms in the expected shape').toBe(4)
+
+    const derived = reconstruct('flarn').stages
+    const wanted = ['today', 'c. 900', 'c. 1 CE', 'c. 4000 BC'].map(
+      (period) => derived.find((s) => s.stage.period === period)!.form,
+    )
+    expect(printed).toEqual(wanted)
   })
 
   it('has no duplicate change ids inside a stage', () => {

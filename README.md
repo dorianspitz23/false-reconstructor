@@ -64,7 +64,7 @@ The Germanic chain is the one to trust. The Latinate chain gets the endings and 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 97 tests
+npm test         # 98 tests
 npm run build
 ```
 
