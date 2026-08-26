@@ -12,6 +12,7 @@
  */
 
 import { spellLatin, spellOldFrench, spellPie, spellProtoItalic } from '../orthography'
+import { isVowel, lengthen, shorten } from '../phonology'
 import type { Ambiguity, Stage } from '../types'
 
 /** Middle English → Old French, c. 1200. */
@@ -92,6 +93,15 @@ export const OLD_FRENCH_TO_LATIN: Stage = {
     },
     { id: 'la-diph-o', name: 'Stressed-vowel diphthongisation, reversed', rule: 'wɔ > ɔ' },
     { id: 'la-eu', name: 'Stressed-vowel diphthongisation, reversed', rule: 'ø > ɔ' },
+    {
+      id: 'la-ou',
+      name: 'Closing of *ō, reversed',
+      // Only the long vowel. Latin ū went to French /y/, so an Old French /uː/
+      // is never continuing one — it is Latin ō or ŭ, closed by way of Proto-
+      // Romance /o/. Short /u/ is left alone: it is what -ulum and -ūra need.
+      rule: 'uː > oː',
+      note: 'Latin `flōrem` → Old French `flour`, `amōrem` → `amour`, `nōs` → `nous`. The long ō closed to /u/ across Gallo-Romance.',
+    },
     /*
      * French nouns descend from the Latin accusative, not the nominative, and
      * Latin had three of those. Which one is not a free choice: a French noun
@@ -144,12 +154,28 @@ export const OLD_FRENCH_TO_LATIN: Stage = {
       })
     }
 
-    out.push({
-      name: 'Vowel length',
-      reason:
-        'Latin distinguished long from short vowels; French lost the distinction entirely and replaced it with quality differences. A French form cannot tell you which Latin vowel it had.',
-      alternative: spellLatin(word.map((s) => (s.p === 'a' ? { ...s, p: 'aː' } : s))),
-    })
+    /*
+     * The reading worth showing is the opposite one for the root vowel — the
+     * vowel a dictionary bothers to mark. Lengthening every /a/ instead meant
+     * this note fired on words containing no /a/ at all and offered back a
+     * string identical to the form printed beside it.
+     */
+    const v = word.findIndex((s) => isVowel(s.p))
+    if (v >= 0) {
+      const flipped = word.map((s, i) =>
+        i === v ? { ...s, p: s.p.endsWith('ː') ? shorten(s.p) : lengthen(s.p) } : s,
+      )
+      const alternative = spellLatin(flipped)
+      // A diphthong has no length to flip, so this can still come out unchanged.
+      if (alternative !== spellLatin(word)) {
+        out.push({
+          name: 'Vowel length',
+          reason:
+            'Latin distinguished long from short vowels; French lost the distinction entirely and replaced it with quality differences. A French form cannot tell you which Latin vowel it had.',
+          alternative,
+        })
+      }
+    }
 
     return out
   },

@@ -16,7 +16,7 @@ This was [asked for on r/SomebodyMakeThis](https://www.reddit.com/r/SomebodyMake
 
 They were right and the reply was wrong. Sound change is the most regular thing in historical linguistics: the **Neogrammarian hypothesis** — that sound laws apply without exception in a given time and place — is what makes the comparative method work at all. Grimm's Law is not a vibe. It is a table, and it has been a table since 1822.
 
-So this is a table. 129 of them, plus 103 rules for turning spelling into sound. (A test asserts that number against the actual ruleset, because it drifted three times in one afternoon before one did.)
+So this is a table. 130 of them, plus 103 rules for turning spelling into sound. (A test asserts that number against the actual ruleset, because it drifted three times in one afternoon before one did.)
 
 The difference matters in practice, not just in principle:
 
@@ -47,17 +47,21 @@ Four exact hits, and the rest differ only in the inflectional ending — which f
 
 This is the whole reason to build it with rules. You can grade it. So here is the grade for the other chain, which is **the weaker of the two**.
 
-Fourteen real French-derived English words, scored against their attested Latin etymon:
+Fourteen real French-derived English words, scored against their attested Latin etymon. Macrons are ignored on both sides of the comparison: vowel length is one of the things the app explicitly says a French form cannot tell you, so grading it there would be grading it on a question it refuses to answer. It prints `curam`, not `cūram`, and offers the long reading beside it.
 
 | | |
 | --- | --- |
-| Exact | `nation` → *nātiōnem*, `part` → *partem*, `art` → *artem*, `cure` → *cūram*, `table` → *tabulam* |
+| Exact | `nation` → *nātiōnem*, `part` → *partem*, `art` → *artem*, `mount` → *montem*, `cure` → *cūram*, `table` → *tabulam* |
 | Right answer offered as an alternative | `port` → *portum*, `chant` → *cantum*, `pure` → *pūrum* |
-| Wrong | `form`, `mount`, `rule`, `flower`, `city`, `river` |
+| Wrong | `form`, `rule`, `flower`, `city`, `river` |
 
-**5 of 14 exact, 3 more surfaced as an alternative.** The failures are almost all vowels, and they have one cause: French loanwords entered English across several centuries and did not all go through the Great Vowel Shift in the same way, so reversing it uniformly overshoots. `city` is worse than that — it comes from *cīvitātem*, which lost an entire syllable on the way, and no regular rule puts that back.
+**6 of 14 exact, 3 more surfaced as an alternative.** What is left over is not one problem but three, and only the first is really a sound-law question:
 
-The Germanic chain is the one to trust. The Latinate chain gets the endings and the consonants right and the vowels roughly.
+- `form` is a declension the French cannot tell you. English dropped the `-e` of French *forme*, and with it the evidence that this was a first-declension noun.
+- `flower` and `river` gained an English syllable after they were borrowed — *flour* was one syllable when it arrived.
+- `city` and `rule` lost consonants and a whole syllable inside French: *cīvitātem* → *cité* is not something a regular rule reverses.
+
+The Germanic chain is still the one to trust. The Latinate chain gets the consonants and the endings right, and the vowels mostly.
 
 ## Run it
 

@@ -260,6 +260,27 @@ describe('invented words', () => {
     }
   })
 
+  /*
+   * An ambiguity is a manicule in the margin saying the evidence cannot decide
+   * between two readings. If the reading it offers is the same string already
+   * printed beside it, the note is noise wearing the costume of information.
+   * The vowel-length note did exactly that on any word containing no /a/.
+   */
+  it('never offers an alternative identical to the form beside it', () => {
+    for (const w of [...words, 'nation', 'mount', 'port', 'form', 'city', 'river', 'flower']) {
+      for (const lineage of ['germanic', 'romance'] as const) {
+        for (const s of reconstruct(w, lineage).stages) {
+          for (const a of s.ambiguities) {
+            expect(
+              a.alternative.normalize('NFC'),
+              `${w} (${lineage}) at ${s.stage.id}: "${a.name}" repeats the form`,
+            ).not.toBe(s.form.normalize('NFC'))
+          }
+        }
+      }
+    }
+  })
+
   it('shows the rhotacism alternative with the *z it describes', () => {
     // The note says the /r/ could go back to *z, so the form beside it has to
     // actually show a z — the West Germanic spelling convention writes it.
@@ -313,6 +334,8 @@ describe('the Romance route', () => {
       ['art', 'artem'],
       ['cure', 'curam'],
       ['table', 'tabulam'],
+      // Needs the Old French /uː/ ← Latin ō closing, or this comes out `mūntem`.
+      ['mount', 'mōntem'],
     ]
     for (const [word, attested] of cases) {
       expect(at(word, 'la', 'romance').form, word).toBe(attested)
