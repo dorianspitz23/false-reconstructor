@@ -52,8 +52,8 @@ Fourteen real French-derived English words, scored against their attested Latin 
 | | |
 | --- | --- |
 | Exact | `nation` → *nātiōnem*, `part` → *partem*, `art` → *artem*, `cure` → *cūram*, `table` → *tabulam* |
-| Right answer offered as an alternative | `port` → *portum*, `chant` → *cantum*, `trible` → *tribulum* |
-| Wrong | `mount`, `flower`, `river`, `city`, `rule`, `pure`, `form` |
+| Right answer offered as an alternative | `port` → *portum*, `chant` → *cantum*, `pure` → *pūrum* |
+| Wrong | `form`, `mount`, `rule`, `flower`, `city`, `river` |
 
 **5 of 14 exact, 3 more surfaced as an alternative.** The failures are almost all vowels, and they have one cause: French loanwords entered English across several centuries and did not all go through the Great Vowel Shift in the same way, so reversing it uniformly overshoots. `city` is worse than that — it comes from *cīvitātem*, which lost an entire syllable on the way, and no regular rule puts that back.
 
