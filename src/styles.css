@@ -1,0 +1,470 @@
+/*
+ * The look is meant to sit somewhere between a philology handbook and a core
+ * sample: warm paper-on-dark, a serif for the word forms, mono for anything
+ * phonetic, and a vertical rail down the page so reading downwards feels like
+ * digging backwards.
+ */
+
+:root {
+  --ink: #ece5d8;
+  --ink-dim: #9a9184;
+  --ink-faint: #6b6459;
+  --bg: #0e0d0c;
+  --bg-raised: #171613;
+  --rule: #2a2723;
+  --gold: #c9a227;
+  --gold-dim: #8a7326;
+  --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  /* A very faint warm vignette, so the page does not read as flat black. */
+  background-image: radial-gradient(120% 80% at 50% 0%, #1a1713 0%, transparent 60%);
+  background-repeat: no-repeat;
+}
+
+.page {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 4rem;
+}
+
+/* ---------------------------------------------------------------- masthead */
+
+.masthead h1 {
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.6rem;
+  line-height: 1.05;
+}
+
+.star {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.7em;
+  vertical-align: 0.12em;
+}
+
+.standfirst {
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: var(--ink-dim);
+  margin: 0 0 0.5rem;
+  max-width: 34rem;
+}
+
+.disclaimer {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  margin: 0;
+  max-width: 34rem;
+}
+
+/* ------------------------------------------------------------------ search */
+
+.search {
+  display: flex;
+  gap: 0.5rem;
+  margin: 2.25rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.search input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  padding: 0.6rem 0.85rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.search input:focus {
+  border-color: var(--gold-dim);
+}
+
+.search input::placeholder {
+  color: var(--ink-faint);
+}
+
+.search button {
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.search button:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+.search .go {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* ---------------------------------------------------------------- examples */
+
+.examples {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+}
+
+.examples button {
+  background: none;
+  border: none;
+  border-bottom: 1px dotted var(--ink-faint);
+  color: var(--ink-dim);
+  font-family: var(--serif);
+  font-size: 1rem;
+  padding: 0 0 1px;
+  cursor: pointer;
+}
+
+.examples button:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.error {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: #d98b6a;
+}
+
+/* ----------------------------------------------------------------- lineage */
+
+.lineage {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 2rem 0 0.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.reason {
+  font-size: 0.95rem;
+  color: var(--ink-dim);
+  margin: 0;
+  flex: 1 1 16rem;
+}
+
+.toggle {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.toggle button {
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+
+.toggle button.on {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* ---------------------------------------------------------------- timeline */
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0 0.5rem;
+}
+
+/* The rail is a single continuous line drawn by each row's own border. */
+.rail {
+  position: relative;
+  border-left: 1px solid var(--rule);
+  margin-left: 0.5rem;
+}
+
+.stage:first-child .rail {
+  margin-top: 1.6rem;
+  height: calc(100% - 1.6rem);
+}
+
+.stage:last-child .rail {
+  height: 1.6rem;
+}
+
+.dot {
+  position: absolute;
+  left: -4.5px;
+  top: 1.45rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.stage:first-child .dot {
+  top: -0.15rem;
+}
+
+.body {
+  padding: 1.15rem 0 1.6rem;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.period {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+}
+
+.tag {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  border: 1px solid var(--gold-dim);
+  border-radius: 2px;
+  padding: 0.05rem 0.3rem;
+}
+
+.form {
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1.15;
+  margin: 0.35rem 0 0.2rem;
+  word-break: break-word;
+}
+
+.is-modern .form {
+  color: var(--ink);
+}
+
+.ipa {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--gold-dim);
+  margin: 0 0 0.5rem;
+  word-break: break-all;
+}
+
+.blurb {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-dim);
+  margin: 0;
+  max-width: 32rem;
+}
+
+/* ----------------------------------------------------------------- changes */
+
+.changes {
+  margin-top: 0.85rem;
+}
+
+.changes > button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.changes > button:hover {
+  color: var(--gold);
+}
+
+.trace {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0 0 0 0.9rem;
+  border-left: 1px solid var(--rule);
+}
+
+.trace li {
+  margin-bottom: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.law {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.step {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.step .to {
+  color: var(--gold-dim);
+}
+
+.arrow {
+  color: var(--rule);
+}
+
+.note {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--ink-faint);
+  max-width: 30rem;
+}
+
+/* ------------------------------------------------------------ ambiguities */
+
+.ambiguities {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0.75rem 0.9rem;
+  background: var(--bg-raised);
+  border-left: 2px solid var(--gold-dim);
+  border-radius: 0 3px 3px 0;
+}
+
+.ambiguities li + li {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+}
+
+.alt-name {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 0.2rem;
+}
+
+.alt-form {
+  display: block;
+  font-size: 1.4rem;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+}
+
+.alt-reason {
+  display: block;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
+
+/* ------------------------------------------------------------------- coda */
+
+.coda {
+  margin-top: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.coda p {
+  margin: 0;
+}
+
+.colophon {
+  margin-top: 3.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+}
+
+a {
+  color: var(--ink-dim);
+  text-decoration-color: var(--rule);
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--gold);
+}
+
+@media (max-width: 30rem) {
+  .page {
+    padding-top: 2.25rem;
+  }
+
+  .stage {
+    grid-template-columns: 1.1rem 1fr;
+  }
+
+  .rail {
+    margin-left: 0.25rem;
+  }
+}
