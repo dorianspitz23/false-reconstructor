@@ -46,10 +46,31 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      # A project site is served from /<repo>/, but attaching a custom domain
+      # moves it to that domain's root. Setting a custom domain in the Pages UI
+      # commits a CNAME file, so that file is the signal — without this, adding
+      # a domain would silently 404 every asset.
+      - id: base
+        name: Work out where the site will be served from
+        run: |
+          if [ -f CNAME ]; then
+            DOMAIN="$(tr -d '[:space:]' < CNAME)"
+            echo "value=/"                     >> "$GITHUB_OUTPUT"
+            echo "site=https://${DOMAIN}/"     >> "$GITHUB_OUTPUT"
+            echo "Custom domain ${DOMAIN} — building for the domain root."
+          else
+            REPO="${{ github.event.repository.name }}"
+            OWNER="${{ github.repository_owner }}"
+            echo "value=/${REPO}/"                             >> "$GITHUB_OUTPUT"
+            echo "site=https://${OWNER}.github.io/${REPO}/"    >> "$GITHUB_OUTPUT"
+            echo "Project site — building for /${REPO}/."
+          fi
+
       - run: npm run build
         env:
-          # Pages serves the site from /<repo>/, not the domain root.
-          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_BASE: ${{ steps.base.outputs.value }}
+          VITE_SITE_URL: ${{ steps.base.outputs.site }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
