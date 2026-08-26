@@ -261,6 +261,28 @@ describe('invented words', () => {
   })
 
   /*
+   * Cited forms in the prose are marked with backticks and the UI turns each
+   * pair into an italic span. An odd number would leave one backtick showing
+   * on the page and swap the italics for the rest of the sentence.
+   */
+  it('marks every cited form with a closed pair of backticks', () => {
+    for (const w of [...words, 'nation', 'mount', 'knight', 'stark', 'trible']) {
+      for (const lineage of ['germanic', 'romance'] as const) {
+        for (const s of reconstruct(w, lineage).stages) {
+          const prose = [
+            ...s.applied.map((c) => c.note ?? ''),
+            ...s.ambiguities.map((a) => a.reason),
+          ]
+          for (const p of prose) {
+            const ticks = (p.match(/`/g) ?? []).length
+            expect(ticks % 2, `unbalanced backticks at ${s.stage.id}: ${p}`).toBe(0)
+          }
+        }
+      }
+    }
+  })
+
+  /*
    * An ambiguity is a manicule in the margin saying the evidence cannot decide
    * between two readings. If the reading it offers is the same string already
    * printed beside it, the note is noise wearing the costume of information.

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { StageResult } from '../engine'
+import { cite } from './cite'
 
 interface Props {
   result: StageResult
@@ -73,7 +74,7 @@ export function StageCard({ result, index }: Props) {
                       <span className="whence-label">from</span>
                       <span>{c.before}</span>
                     </p>
-                    {c.note && <p className="note">{c.note}</p>}
+                    {c.note && <p className="note">{cite(c.note)}</p>}
                   </li>
                 ))}
               </ol>
@@ -88,7 +89,7 @@ export function StageCard({ result, index }: Props) {
             </span>
             <h3>{a.name}</h3>
             <p className="gloss-form">{a.alternative}</p>
-            <p className="gloss-reason">{a.reason}</p>
+            <p className="gloss-reason">{cite(a.reason)}</p>
           </aside>
         ))}
       </div>

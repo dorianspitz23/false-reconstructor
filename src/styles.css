@@ -510,6 +510,19 @@ body {
   margin: var(--space-2xs) 0 0;
 }
 
+/* A form quoted inside running prose. Italic is the scholarly convention —
+   and never a monospace face, which would say "code" about a word Chaucer
+   said. */
+.cited {
+  font-style: italic;
+}
+
+/* Where the run is already italic the emphasis reverses to roman, which is
+   both the typographic rule and the only way the citation stays visible. */
+.gloss-reason .cited {
+  font-style: normal;
+}
+
 /* ------------------------------------------------------------------- gloss */
 
 /*
