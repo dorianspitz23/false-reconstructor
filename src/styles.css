@@ -675,3 +675,56 @@ a:hover {
     padding: var(--space-md);
   }
 }
+
+/* ------------------------------------------------------------ touch targets */
+
+/*
+ * On a touch screen a finger is roughly 44px wide, and several of these
+ * controls are 19px tall — the lineage toggle, the sound-change disclosures,
+ * the footer links. That fails WCAG 2.2 SC 2.5.8, which asks for 24px, and it
+ * is simply hard to hit.
+ *
+ * They cannot just take padding: their underline is a border-bottom, so any
+ * vertical padding would detach the rule from the word it underlines. Instead
+ * an invisible band is centred on each one, which changes the hit area without
+ * moving a single pixel of the design.
+ *
+ * Scoped to a coarse pointer, so the mouse layout this was drawn for is left
+ * exactly as it was.
+ */
+.hand button,
+.changes > button,
+.foot a {
+  position: relative;
+}
+
+.hand button::after,
+.changes > button::after,
+.foot a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  /* 24px is the WCAG 2.2 floor, and costs nothing here: the band is invisible
+     and out of flow, so the drawn design does not move by a pixel. */
+  height: 24px;
+  transform: translateY(-50%);
+}
+
+/* A fingertip is nearer 44px than 24px, so touch gets the larger band. The
+   mouse layout this was drawn for keeps its own proportions either way. */
+@media (pointer: coarse) {
+  .hand button::after,
+  .changes > button::after,
+  .foot a::after {
+    height: 44px;
+  }
+
+  /* These carry no border-bottom trick, so they can simply grow. */
+  .quill button,
+  .quill input,
+  .unwritten button {
+    min-height: 44px;
+  }
+}
