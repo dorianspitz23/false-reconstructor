@@ -11,6 +11,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "fonts": "node scripts/fetch-fonts.mjs",
     "typecheck": "tsc -b --noEmit false --emitDeclarationOnly false"
   },
   "dependencies": {
