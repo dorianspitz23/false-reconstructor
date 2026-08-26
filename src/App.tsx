@@ -6,6 +6,14 @@ import { StageCard } from './ui/StageCard'
 
 const EXAMPLES = ['flarn', 'sprockle', 'knurst', 'thwaggle', 'prolation']
 
+/**
+ * Which repo this was built from. CI knows it for certain, so it passes it in
+ * rather than having a copy of the owner's name written down here — a copy
+ * that would quietly point at the wrong place the moment the repo moved or the
+ * account was renamed.
+ */
+const REPO_URL = import.meta.env.VITE_REPO_URL ?? 'https://github.com/'
+
 function readUrl(): { word: string; lineage?: Lineage } {
   const params = new URLSearchParams(window.location.search)
   const lineage = params.get('l')
@@ -150,7 +158,7 @@ export default function App() {
       )}
 
       <footer className="foot">
-        <a href="https://github.com/dorianspitz23/false-reconstructor">Source on GitHub</a>
+        <a href={REPO_URL}>Source on GitHub</a>
         <span aria-hidden="true">·</span>
         <span>MIT licensed</span>
         <span aria-hidden="true">·</span>

@@ -53,23 +53,37 @@ jobs:
           cache: npm
       - run: npm ci
 
-      # A project site is served from /<repo>/, but attaching a custom domain
-      # moves it to that domain's root. Setting a custom domain in the Pages UI
-      # commits a CNAME file, so that file is the signal — without this, adding
-      # a domain would silently 404 every asset.
+      # Pages serves the same repo from three different places, and each needs a
+      # different asset base. Getting it wrong 404s every file while the build
+      # still reports green, so this derives it rather than hardcoding it:
+      #
+      #   custom domain (CNAME present)   →  https://example.com/
+      #   repo named <owner>.github.io    →  https://<owner>.github.io/
+      #   anything else (a project site)  →  https://<owner>.github.io/<repo>/
+      #
+      # Setting a custom domain in the Pages UI commits the CNAME file, so that
+      # file is the signal for the first case.
       - id: base
         name: Work out where the site will be served from
         run: |
+          REPO="${{ github.event.repository.name }}"
+          OWNER="${{ github.repository_owner }}"
+          # Pages matches the owner-site repo name case-insensitively.
+          LOWER_REPO="$(echo "$REPO" | tr '[:upper:]' '[:lower:]')"
+          LOWER_OWNER="$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')"
+
           if [ -f CNAME ]; then
             DOMAIN="$(tr -d '[:space:]' < CNAME)"
-            echo "value=/"                     >> "$GITHUB_OUTPUT"
-            echo "site=https://${DOMAIN}/"     >> "$GITHUB_OUTPUT"
+            echo "value=/"                  >> "$GITHUB_OUTPUT"
+            echo "site=https://${DOMAIN}/"  >> "$GITHUB_OUTPUT"
             echo "Custom domain ${DOMAIN} — building for the domain root."
+          elif [ "$LOWER_REPO" = "${LOWER_OWNER}.github.io" ]; then
+            echo "value=/"                          >> "$GITHUB_OUTPUT"
+            echo "site=https://${LOWER_REPO}/"      >> "$GITHUB_OUTPUT"
+            echo "Owner site — building for the root of ${LOWER_REPO}."
           else
-            REPO="${{ github.event.repository.name }}"
-            OWNER="${{ github.repository_owner }}"
             echo "value=/${REPO}/"                             >> "$GITHUB_OUTPUT"
-            echo "site=https://${OWNER}.github.io/${REPO}/"    >> "$GITHUB_OUTPUT"
+            echo "site=https://${LOWER_OWNER}.github.io/${REPO}/" >> "$GITHUB_OUTPUT"
             echo "Project site — building for /${REPO}/."
           fi
 
@@ -77,6 +91,9 @@ jobs:
         env:
           VITE_BASE: ${{ steps.base.outputs.value }}
           VITE_SITE_URL: ${{ steps.base.outputs.site }}
+          # So the footer's source link follows the repo instead of naming an
+          # owner who may since have renamed the account or moved it to an org.
+          VITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
