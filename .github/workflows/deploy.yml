@@ -11,12 +11,12 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
   test:
+    # Deliberately not covered by the deploy concurrency group below. Guarding
+    # the whole workflow meant a run of quick pushes cancelled the *tests* along
+    # with the deploy, so only the last commit in a burst was ever checked and
+    # a broken one in the middle would sail through unexamined.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +36,12 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    # Only one deploy in flight, and a newer commit supersedes an older one.
+    # Pages allows a single concurrent deployment, so this has to stay — it just
+    # belongs on the job that deploys rather than on the whole workflow.
+    concurrency:
+      group: pages
+      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
