@@ -4,17 +4,22 @@ import { describe, expect, it } from 'vitest'
 import { G2P_RULE_COUNT, reconstruct, SOUND_CHANGE_COUNT, stagesFor } from '../src/engine'
 
 /**
- * The rule count is quoted in prose in three places. The app derives its own
- * from the ruleset, but the README and the social card are written by hand and
- * went stale three times in a single afternoon — once per rule added — because
- * nothing connected the sentence to the thing it described.
+ * Claims the project makes about itself, checked against the thing it is
+ * describing.
  *
- * This connects them. Add a sound change and these fail until the copy is
- * updated, which is the only reliable way a number in prose stays true.
+ * The rule count went stale three times in a single afternoon — once per rule
+ * added — because it lived in prose while the ruleset lived in code, and
+ * nothing connected the two. The social card has the same exposure: it is a
+ * hand-built file rendered to a PNG, and it is the first thing anyone sees when
+ * the link is shared, so a stale derivation on it is a wrong answer with a wide
+ * audience and no reader.
+ *
+ * Every check here fails loudly the moment the code moves and the copy does
+ * not, which is the only reliable way a number in prose stays true.
  */
 const read = (p: string) => readFileSync(resolve(__dirname, '..', p), 'utf8')
 
-describe('the quoted rule count matches the ruleset', () => {
+describe('the project’s claims about itself', () => {
   it('is a plausible number in the first place', () => {
     // Guards against the derivation silently returning 0 and every check below
     // passing against an empty ruleset.
