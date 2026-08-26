@@ -2,9 +2,11 @@
 
 **Type a word English never had. Watch real historical sound laws run backwards through it — Early Modern English, Middle English, Old English, Proto-West Germanic, Proto-Germanic, all the way to Proto-Indo-European.**
 
-There is no AI in this repository. Every form is produced by applying documented sound changes in reverse, in order, to a phoneme string. The same word always gives the same answer, and every step names the law that produced it.
+[**Try it →**](https://dorianspitz23.github.io/false-reconstructor/)
 
-> **flarn** → *flarn* (1600) → *flarn* (1400) → **flærn** (900) → **\*flarna** (400) → **\*flarnaz** (1 CE) → **\*plórnos-** (4000 BC)
+![The word flarn traced back through Old English flærn to Proto-Indo-European *plórnos-](public/social.png)
+
+There is no AI in this repository. Every form is produced by applying documented sound changes in reverse, in order, to a phoneme string. The same word always gives the same answer, and every step names the law that produced it.
 
 ---
 
