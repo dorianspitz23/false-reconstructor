@@ -52,7 +52,7 @@ This is the whole reason to build it with rules. You can grade it.
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 84 tests
+npm test         # 88 tests
 npm run build
 ```
 

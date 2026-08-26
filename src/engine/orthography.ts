@@ -25,15 +25,8 @@ function render(word: Word, table: Table, opts: { srcAware?: Table } = {}): stri
     .join('')
 }
 
-// --------------------------------------------------------------------------
-// Modern English — echo the user's own spelling.
-// --------------------------------------------------------------------------
-
-export function spellModern(word: Word): string {
-  // One grapheme can yield several segments (`ar` → /ɑ/ + /r/), so joining every
-  // segment's source would repeat it. Emit each run of shared source once.
-  return word.map((s) => s.src).filter((src, i, all) => src !== all[i - 1]).join('')
-}
+// The Modern English form is not spelled from phonemes — it is whatever the
+// user typed, which `reconstruct` passes through verbatim.
 
 // --------------------------------------------------------------------------
 // Early Modern English, c. 1600

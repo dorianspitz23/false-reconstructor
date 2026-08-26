@@ -9,7 +9,6 @@
 
 import { classify } from './classify'
 import { graphemesToPhonemes, normalize } from './g2p'
-import { spellModern } from './orthography'
 import { applyChanges, ipa } from './rules'
 import { GERMANIC_TAIL } from './stages/germanic'
 import { ROMANCE_TAIL } from './stages/romance'
@@ -86,7 +85,10 @@ export function reconstruct(input: string, override?: Lineage): Reconstruction {
         reconstructed: false,
         confidence: 1,
       },
-      form: spellModern(modern),
+      // Echo exactly what was typed. Rebuilding the spelling from the phonemes
+      // reorders anything a grapheme split across segments — `grimble` came
+      // back as `grimbel` — and this form is the one thing we already know.
+      form: cleaned,
       ipa: ipa(modern),
       applied: [],
       ambiguities: [],

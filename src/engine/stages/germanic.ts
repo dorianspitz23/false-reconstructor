@@ -68,8 +68,11 @@ export const MIDDLE_TO_OLD_ENGLISH: Stage = {
     {
       id: 'oe-final-vowel',
       name: 'Reduction of unstressed vowels, reversed',
-      rule: 'ə > e / _ #',
-      note: 'Old English had a full set of unstressed endings. They all collapsed to schwa, then vanished.',
+      // Every position, not just word-final: the schwa in `grimble` is medial,
+      // and Old English had no schwa anywhere — `æppel`, `fugol`, `setl` all
+      // carried a full vowel until Middle English levelled them.
+      rule: 'ə > e',
+      note: 'Old English had a full set of unstressed vowels. They all collapsed to schwa, then most of them vanished.',
     },
     { id: 'oe-ng', name: 'Old English wrote /ŋ/ as n', rule: 'ŋ > n' },
   ],

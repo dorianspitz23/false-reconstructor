@@ -49,6 +49,19 @@ describe('grapheme-to-phoneme', () => {
     expect(w[w.length - 1]).toMatchObject({ p: 'n', src: 'ne' })
   })
 
+  it('gives final -le its syllable', () => {
+    // `grimble` is grim-bel, two syllables. Dropping the vowel leaves an
+    // unpronounceable /bl/ and makes the word a syllable short.
+    expect(g2p('grimble')).toBe('ɡrɪmbəl')
+    expect(g2p('sprockle')).toBe('sprɒkəl')
+    expect(g2p('little')).toBe('lɪtəl')
+  })
+
+  it('leaves -le alone after a vowel, where it is not syllabic', () => {
+    expect(g2p('ale')).toBe('eɪl')
+    expect(g2p('faile')).toBe('feɪl')
+  })
+
   it('rejects input with no letters', () => {
     expect(() => graphemesToPhonemes('!!!')).toThrow(/letters a–z/)
   })
@@ -167,6 +180,27 @@ describe('invented words', () => {
 
   it.each(words)('is deterministic for %s', (w) => {
     expect(reconstruct(w)).toEqual(reconstruct(w))
+  })
+
+  it('echoes the typed spelling back verbatim', () => {
+    // Reconstructing this line from the phonemes reordered it into `grimbel`,
+    // and collapsed the doubled g of `thwaggle`.
+    expect(reconstruct('grimble').stages[0]!.form).toBe('grimble')
+    expect(reconstruct('thwaggle').stages[0]!.form).toBe('thwaggle')
+    expect(reconstruct('  ShIP! ').stages[0]!.form).toBe('ship')
+  })
+
+  it('carries no schwa past Old English', () => {
+    // Schwa is a Middle English levelling. Everything older had a full vowel,
+    // and Proto-Indo-European had no schwa at all.
+    for (const w of ['grimble', 'sprockle', 'thwaggle', 'knurst']) {
+      const older = reconstruct(w).stages.filter((s) =>
+        ['oe', 'pwg', 'pg', 'pie'].includes(s.stage.id),
+      )
+      for (const s of older) {
+        expect(s.ipa, `${w} at ${s.stage.id}`).not.toContain('ə')
+      }
+    }
   })
 
   it('marks reconstructed stages with an asterisk and attested ones without', () => {

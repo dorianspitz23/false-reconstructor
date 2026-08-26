@@ -25,6 +25,11 @@ interface Ctx {
 interface G2PRule {
   g: string
   ipa: string[]
+  /**
+   * Source spelling per phoneme, for the rare grapheme that splits across
+   * segments carrying different evidence. Defaults to `g` for all of them.
+   */
+  srcs?: string[]
   when?: (c: Ctx) => boolean
 }
 
@@ -153,6 +158,22 @@ const RULES: G2PRule[] = [
   { g: 'y', ipa: ['i'], when: (c) => atEnd(c, 1) },
   { g: 'y', ipa: ['ɪ'] },
 
+  /*
+   * Final `-le` after a consonant is a syllabic /l/ — `table`, `apple`,
+   * `little`. The vowel is real and has to be here, or the word comes out a
+   * syllable short and the transcription reads as an unpronounceable cluster.
+   *
+   * The /l/ keeps `l` as its source rather than `le`, because that trailing e
+   * is spent: Middle English wrote these `appel`, with the schwa already in the
+   * ending and no further final -e to restore.
+   */
+  {
+    g: 'le',
+    ipa: ['ə', 'l'],
+    srcs: ['e', 'l'],
+    when: (c) => atEnd(c, 2) && c.i > 0 && !isVowelLetter(after(c, 1)),
+  },
+
   // ---- single consonants ----
   { g: 'c', ipa: ['s'], when: (c) => isFrontLetter(nextAfter(c, 1)) },
   { g: 'c', ipa: ['k'] },
@@ -207,7 +228,7 @@ export function graphemesToPhonemes(input: string): Word {
       continue
     }
 
-    for (const p of rule.ipa) out.push({ p, src: rule.g })
+    rule.ipa.forEach((p, n) => out.push({ p, src: rule.srcs?.[n] ?? rule.g }))
 
     // A silent grapheme still has to leave a trace, or later stages lose the
     // evidence. Attach it to the segment before it: `flane` ends up with the
