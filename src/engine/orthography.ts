@@ -98,7 +98,7 @@ export function spellOldEnglish(word: Word): string {
 
 const PWG: Table = {
   a: 'a', aː: 'ā', e: 'e', eː: 'ē', i: 'i', iː: 'ī', o: 'o', oː: 'ō', u: 'u', uː: 'ū',
-  ai: 'ai', au: 'au', eu: 'eu', iu: 'iu', æ: 'a', ə: 'a',
+  ai: 'ai', au: 'au', eu: 'eu', iu: 'iu', æ: 'a', ə: 'a', ɛ: 'e', ɛː: 'ē', ɔ: 'o', ɔː: 'ō',
   θ: 'þ', ð: 'd', β: 'b', ɣ: 'g', x: 'h', xʷ: 'hw', kʷ: 'kw', ɡʷ: 'gw',
   k: 'k', ɡ: 'g', j: 'j', w: 'w', v: 'b', ʃ: 'sk', tʃ: 'k', dʒ: 'g',
   // Written *z, per the standard Proto-West-Germanic convention. The derivation
@@ -119,7 +119,7 @@ export function spellProtoWestGermanic(word: Word): string {
 
 const PG: Table = {
   a: 'a', aː: 'ā', e: 'e', eː: 'ē', i: 'i', iː: 'ī', o: 'o', oː: 'ō', u: 'u', uː: 'ū',
-  ai: 'ai', au: 'au', eu: 'eu', iu: 'iu', æ: 'a', ə: 'a',
+  ai: 'ai', au: 'au', eu: 'eu', iu: 'iu', æ: 'a', ə: 'a', ɛ: 'e', ɛː: 'ē', ɔ: 'o', ɔː: 'ō',
   θ: 'þ', ð: 'd', β: 'b', ɣ: 'g', x: 'h', xʷ: 'hw', kʷ: 'kw', ɡʷ: 'gw',
   k: 'k', ɡ: 'g', j: 'j', w: 'w', z: 'z', v: 'b', ʃ: 'sk',
   ll: 'll', mm: 'mm', nn: 'nn', pp: 'pp', tt: 'tt', kk: 'kk', ss: 'ss', rr: 'rr',
@@ -136,6 +136,9 @@ export function spellProtoGermanic(word: Word): string {
 const PIE: Table = {
   a: 'a', aː: 'ā', e: 'e', eː: 'ē', i: 'i', iː: 'ī', o: 'o', oː: 'ō', u: 'u', uː: 'ū',
   ai: 'ai', au: 'au', eu: 'eu', ei: 'ei', oi: 'oi', ou: 'ou',
+  // PIE had no open/close vowel contrast and no /ŋ/ or /ʃ/; anything arriving
+  // in one of those shapes is written with its plain counterpart.
+  ɛ: 'e', ɛː: 'ē', ɔ: 'o', ɔː: 'ō', ŋ: 'n', ʃ: 's', ə: 'e',
   bʰ: 'bʰ', dʰ: 'dʰ', ɡʰ: 'gʰ', ɡʷʰ: 'gʷʰ', gʷʰ: 'gʷʰ',
   kʷ: 'kʷ', ɡʷ: 'gʷ', gʷ: 'gʷ',
   p: 'p', t: 't', k: 'k', b: 'b', d: 'd', ɡ: 'g', s: 's',
@@ -172,7 +175,7 @@ function accentFirstVowel(s: string): string {
 
 const OLD_FRENCH: Table = {
   a: 'a', e: 'e', ɛ: 'e', i: 'i', o: 'o', ɔ: 'o', u: 'ou', y: 'u', ø: 'eu', ə: 'e',
-  aː: 'a', eː: 'e', iː: 'i', oː: 'o', uː: 'ou',
+  aː: 'a', eː: 'e', iː: 'i', oː: 'o', uː: 'ou', ɛː: 'e', ɔː: 'o', æ: 'a',
   je: 'ie', wɔ: 'ue', ai: 'ai', ei: 'ei', ou: 'ou', au: 'au',
   tʃ: 'ch', dʒ: 'j', ʃ: 'ss', ʒ: 'g', ts: 'z', k: 'c', ɡ: 'g', kʷ: 'qu',
   θ: 't', ð: 'd', j: 'i', w: 'v', ɲ: 'gn', ʎ: 'ill', z: 's', v: 'v', ŋ: 'n',
@@ -185,6 +188,8 @@ export function spellOldFrench(word: Word): string {
 const LATIN: Table = {
   a: 'a', aː: 'ā', e: 'e', eː: 'ē', i: 'i', iː: 'ī', o: 'o', oː: 'ō', u: 'u', uː: 'ū',
   y: 'y', ɛ: 'e', ɔ: 'o', ə: 'e', ai: 'ae', au: 'au', oi: 'oe', ei: 'ei',
+  // Latin had no open/close vowel contrast; length is what it wrote.
+  ɛː: 'ē', ɔː: 'ō', æ: 'a', ø: 'oe',
   k: 'c', kʷ: 'qu', ɡ: 'g', ɡʷ: 'gu', j: 'i', w: 'v', θ: 'th', ʃ: 's', tʃ: 'c',
   dʒ: 'g', ʒ: 'i', z: 's', v: 'v', ŋ: 'n', x: 'h', ts: 't',
 }
@@ -196,6 +201,8 @@ export function spellLatin(word: Word): string {
 const PROTO_ITALIC: Table = {
   ...LATIN,
   k: 'k', kʷ: 'kʷ', w: 'w', j: 'j', θ: 'þ', x: 'χ', f: 'f', ɸ: 'f',
+  // The medial voiced fricative is conventionally written *β at this depth.
+  β: 'β',
 }
 
 export function spellProtoItalic(word: Word): string {

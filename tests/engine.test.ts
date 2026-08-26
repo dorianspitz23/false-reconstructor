@@ -207,14 +207,50 @@ describe('invented words', () => {
   })
 
   it('resolves a Latinate -le into a real Latin ending', () => {
-    // Latin -ulum is where these actually land; `tribulum` is even a real word.
-    expect(at('trible', 'la', 'romance').form).toMatch(/ulum$/)
+    // Latin -ula: `tabula`, `rēgula`, `fābula`. The second-declension `-ulum`
+    // is equally possible and is offered alongside rather than picked silently.
+    const la = at('trible', 'la', 'romance')
+    expect(la.form).toMatch(/ulam$/)
+    expect(la.ambiguities.map((a) => a.alternative)).toContain('tribulum')
   })
 
   it('marks reconstructed stages with an asterisk and attested ones without', () => {
     const r = reconstruct('flarn')
     for (const s of r.stages) {
       expect(s.form.startsWith('*')).toBe(s.stage.reconstructed)
+    }
+  })
+
+  /**
+   * Each stage renders through a lookup table, and a phoneme missing from it
+   * falls through as its raw IPA symbol — `vermɔːlentem` instead of
+   * `vermōlentem`. That is silent: the form still looks vaguely plausible, so
+   * nothing catches it except reading every output. This does the reading.
+   */
+  it('never leaks raw IPA into a stage spelling', () => {
+    // Symbols that only ever appear when a table lookup missed.
+    const RAW = /[ɔɛɪʊʌæɑɒəɜʃʒŋɣ]/u
+    // Minus the ones a given tradition legitimately writes.
+    const LEGITIMATE: Record<string, RegExp> = {
+      oe: /[æǣœ]/u,
+      pit: /[χβ]/u,
+    }
+
+    const words = [
+      'vermolent', 'weazzen', 'sangy', 'shrend', 'trible', 'groable',
+      'prolation', 'flabricity', 'contradicture', 'knurst', 'thwaggle',
+      'sprockle', 'blorth', 'quibbet', 'yeltch', 'wraithen', 'stark',
+    ]
+
+    for (const w of words) {
+      for (const lineage of ['germanic', 'romance'] as const) {
+        for (const s of reconstruct(w, lineage).stages) {
+          if (s.stage.id === 'mode') continue
+          const allowed = LEGITIMATE[s.stage.id]
+          const suspect = [...s.form].filter((ch) => !allowed?.test(ch)).join('')
+          expect(suspect, `${w} (${lineage}) at ${s.stage.id}: ${s.form}`).not.toMatch(RAW)
+        }
+      }
     }
   })
 
@@ -261,8 +297,32 @@ describe('the Romance route', () => {
     expect(ids).toEqual(['mode', 'emode', 'me', 'ofr', 'la', 'pit', 'pie'])
   })
 
-  it('restores the Latin accusative ending', () => {
-    expect(at('vermolent', 'la').form).toMatch(/um$/)
+  it('restores the Latin accusative, picking the ending the shape selects', () => {
+    // Consonant-final → third declension -em, the largest declension.
+    expect(at('vermolent', 'la').form).toMatch(/em$/)
+    // French -e → first declension -am, which the shape does determine.
+    expect(at('cure', 'la', 'romance').form).toMatch(/am$/)
+  })
+
+  it('grades close to attested Latin on real borrowings', () => {
+    // The Germanic chain is checked against attested Old English above. This is
+    // the same honest check for the Romance side, which is the weaker of the two.
+    const cases: [string, string][] = [
+      ['nation', 'nātiōnem'],
+      ['part', 'partem'],
+      ['art', 'artem'],
+      ['cure', 'curam'],
+      ['table', 'tabulam'],
+    ]
+    for (const [word, attested] of cases) {
+      expect(at(word, 'la', 'romance').form, word).toBe(attested)
+    }
+  })
+
+  it('offers the second declension when the shape cannot decide', () => {
+    // `port` really is from `portum`, and nothing in the French tells you.
+    const alts = at('port', 'la', 'romance').ambiguities.map((a) => a.alternative)
+    expect(alts).toContain('portum')
   })
 
   it('undoes rhotacism — Latin flōr- from *flōs-', () => {

@@ -45,14 +45,26 @@ The honest test for a tool aimed at words that don't exist is to feed it words t
 
 Four exact hits, and the rest differ only in the inflectional ending — which for a word that never existed is unknowable anyway, and which the app tells you it is guessing at. Grimm's Law comes out right every time: `f` → `*p` (father/pater), `θ` → `*t` (three/trēs), `h` → `*k` (heart/cordis).
 
-This is the whole reason to build it with rules. You can grade it.
+This is the whole reason to build it with rules. You can grade it. So here is the grade for the other chain, which is **the weaker of the two**.
+
+Fourteen real French-derived English words, scored against their attested Latin etymon:
+
+| | |
+| --- | --- |
+| Exact | `nation` → *nātiōnem*, `part` → *partem*, `art` → *artem*, `cure` → *cūram*, `table` → *tabulam* |
+| Right answer offered as an alternative | `port` → *portum*, `chant` → *cantum*, `trible` → *tribulum* |
+| Wrong | `mount`, `flower`, `river`, `city`, `rule`, `pure`, `form` |
+
+**5 of 14 exact, 3 more surfaced as an alternative.** The failures are almost all vowels, and they have one cause: French loanwords entered English across several centuries and did not all go through the Great Vowel Shift in the same way, so reversing it uniformly overshoots. `city` is worse than that — it comes from *cīvitātem*, which lost an entire syllable on the way, and no regular rule puts that back.
+
+The Germanic chain is the one to trust. The Latinate chain gets the endings and the consonants right and the vowels roughly.
 
 ## Run it
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 89 tests
+npm test         # 92 tests
 npm run build
 ```
 
@@ -146,6 +158,7 @@ For the rare change that needs syllable structure rather than a neighbouring seg
 ## Honest limits
 
 - **The two chains are the two big ones.** Greek, Norse and Celtic borrowings all get routed down Germanic or Latinate.
+- **The Latinate chain is weaker than the Germanic one**, and measurably so — see the grading above. Its vowels are the soft spot, because French loans arrived across several centuries and the Great Vowel Shift did not treat them uniformly.
 - **Grapheme-to-phoneme is rules, not a dictionary,** so a spelling English never settled on (`ough`) gets one reading where a real word might have five.
 - **Stress is assumed root-initial** in PIE. Real PIE accent was mobile, which is exactly why Verner's Law is flagged rather than applied.
 - **Semantics are not modelled at all.** This tells you what a word would have *sounded* like, never what it would have *meant*.

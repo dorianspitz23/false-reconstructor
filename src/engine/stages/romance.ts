@@ -70,6 +70,12 @@ export const OLD_FRENCH_TO_LATIN: Stage = {
       note: 'Latin `cantāre` → French `chanter`. Only French did this, which is why it looks so unlike Spanish.',
     },
     { id: 'la-palat-front', name: 'Palatalisation before front vowels, reversed', rule: 't s > k' },
+    {
+      id: 'la-sh',
+      name: 'No /ʃ/ in Latin',
+      rule: 'ʃ > s',
+      note: 'Latin had no /ʃ/. Where French shows one it is a later palatalisation of /s/ or /sk/.',
+    },
     { id: 'la-j', name: 'Fortition of /j/, reversed', rule: 'dʒ > j' },
     {
       id: 'la-lenition-p',
@@ -86,35 +92,67 @@ export const OLD_FRENCH_TO_LATIN: Stage = {
     },
     { id: 'la-diph-o', name: 'Stressed-vowel diphthongisation, reversed', rule: 'wɔ > ɔ' },
     { id: 'la-eu', name: 'Stressed-vowel diphthongisation, reversed', rule: 'ø > ɔ' },
+    /*
+     * French nouns descend from the Latin accusative, not the nominative, and
+     * Latin had three of those. Which one is not a free choice: a French noun
+     * ending in -e goes back to the first declension, and everything else to
+     * the second or third. So the consonant rule fires first and the -e rule
+     * second, each on the shape that actually selects it.
+     */
     {
-      id: 'la-final-a',
-      name: 'Loss of final vowels, reversed',
-      rule: 'ə > a / _ #',
-      note: 'Latin -a survived as French -e. Every other final vowel was lost outright.',
-    },
-    {
-      id: 'la-accusative',
+      id: 'la-accusative-3rd',
       name: 'Loss of case endings, reversed',
-      rule: '∅ > u m / C _ #',
-      note: 'French nouns descend from the Latin accusative, not the nominative: `chant` from `cantum`.',
+      rule: '∅ > e m / C _ #',
+      note: 'Latin `partem`, `montem`, `flōrem`. The third declension was the largest, so a consonant-final French noun most often came through it.',
     },
     {
-      // Runs last so it can consume the accusative ending the rule above added
-      // and replace it with the third-declension one this suffix actually takes.
+      id: 'la-accusative-1st',
+      name: 'Loss of case endings, reversed',
+      rule: 'ə > a m / _ #',
+      note: 'Latin `cūram`. French -e is the first declension, and nothing else — that ending is one of the few the French form still tells you.',
+    },
+    {
+      // Corrects the ending the consonant rule just added. Ordered after it
+      // rather than before, because inserting first would leave the word ending
+      // in /m/ and the consonant rule would fire on top of it.
+      id: 'la-ulam',
+      name: 'Loss of case endings, reversed',
+      rule: 'u l e m > u l a m / _ #',
+      note: 'The -le ending goes back to Latin -ula, which is first declension: `tabula`, `rēgula`, `fābula`. Not -ulem.',
+    },
+    {
+      // Runs last so it can consume the ending the rules above added and swap in
+      // the one this particular suffix actually takes.
       id: 'la-tionem',
       name: 'The -tiōnem suffix, restored',
-      rule: 's i o n u m > t i oː n e m',
+      rule: 's i o n e m > t i oː n e m',
       note: 'Latin `nātiōnem` → Old French `nacion` → English `nation`. The /t/ went palatal, then the whole ending collapsed into one syllable.',
     },
   ],
-  ambiguities: (word) => [
-    {
+  ambiguities: (word) => {
+    const out: Ambiguity[] = []
+
+    // A consonant-final French noun could have come through either the second
+    // or the third declension, and nothing downstream records which.
+    const tail = word.slice(-2).map((s) => s.p).join('')
+    if (tail === 'em' || tail === 'am') {
+      out.push({
+        name: 'Which declension?',
+        reason:
+          'Latin `cantum`, `partem` and `tabulam` can all end up as the same shape in French. The ending picked here is the likeliest for this shape, but the second declension is entirely possible — `port` really is from `portum`.',
+        alternative: spellLatin([...word.slice(0, -2), { p: 'u', src: '' }, { p: 'm', src: '' }]),
+      })
+    }
+
+    out.push({
       name: 'Vowel length',
       reason:
         'Latin distinguished long from short vowels; French lost the distinction entirely and replaced it with quality differences. A French form cannot tell you which Latin vowel it had.',
       alternative: spellLatin(word.map((s) => (s.p === 'a' ? { ...s, p: 'aː' } : s))),
-    },
-  ],
+    })
+
+    return out
+  },
 }
 
 /** Latin → Proto-Italic, c. 500 BC. */
