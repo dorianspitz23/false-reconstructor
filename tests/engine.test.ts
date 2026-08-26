@@ -190,17 +190,25 @@ describe('invented words', () => {
     expect(reconstruct('  ShIP! ').stages[0]!.form).toBe('ship')
   })
 
-  it('carries no schwa past Old English', () => {
-    // Schwa is a Middle English levelling. Everything older had a full vowel,
-    // and Proto-Indo-European had no schwa at all.
-    for (const w of ['grimble', 'sprockle', 'thwaggle', 'knurst']) {
-      const older = reconstruct(w).stages.filter((s) =>
-        ['oe', 'pwg', 'pg', 'pie'].includes(s.stage.id),
-      )
-      for (const s of older) {
+  it('carries no schwa into any ancient stage, on either chain', () => {
+    // Schwa is a Middle English levelling. Old English had full vowels in these
+    // endings, Latin had no schwa at all, and PIE had none either. Both chains
+    // have to resolve it — fixing only the Germanic side left `-able` and
+    // `-ture` words carrying a schwa all the way into a PIE root.
+    const ANCIENT = ['oe', 'pwg', 'pg', 'la', 'pit', 'pie']
+    const words = ['grimble', 'sprockle', 'thwaggle', 'knurst', 'trible', 'groable', 'nuncture']
+
+    for (const w of words) {
+      for (const s of reconstruct(w).stages) {
+        if (!ANCIENT.includes(s.stage.id)) continue
         expect(s.ipa, `${w} at ${s.stage.id}`).not.toContain('ə')
       }
     }
+  })
+
+  it('resolves a Latinate -le into a real Latin ending', () => {
+    // Latin -ulum is where these actually land; `tribulum` is even a real word.
+    expect(at('trible', 'la', 'romance').form).toMatch(/ulum$/)
   })
 
   it('marks reconstructed stages with an asterisk and attested ones without', () => {

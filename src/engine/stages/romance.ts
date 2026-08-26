@@ -39,6 +39,16 @@ export const MIDDLE_TO_OLD_FRENCH: Stage = {
       note: 'Soft ⟨c⟩ was an affricate /ts/ in Old French before it simplified to /s/.',
     },
     { id: 'ofr-u', name: 'Old French vowels', rule: 'ʊ > u' },
+    {
+      id: 'ofr-medial-schwa',
+      name: 'Reduction of unstressed vowels, reversed',
+      // Old French had schwa in final position only, and Latin had none at all.
+      // A medial one — the /ə/ of `-able`, `-ture` — has to go back to a full
+      // vowel, and /u/ is the one standing in the Latin endings these become:
+      // `-ulus`, `-ulum`, `-ūra`.
+      rule: 'ə > u / _ C',
+      note: 'Latin had no schwa. The vowel in endings like -able and -ture was full: `-ulum`, `-ūra`.',
+    },
     { id: 'ofr-schwa', name: 'Old French final -e', rule: 'ə > ə / _ #' },
   ],
 }
