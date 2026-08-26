@@ -26,6 +26,18 @@ export function stagesFor(lineage: Lineage): Stage[] {
   return [...SHARED, ...(lineage === 'romance' ? ROMANCE_TAIL : GERMANIC_TAIL)]
 }
 
+/**
+ * How many distinct sound changes are implemented, across both lineages.
+ *
+ * Derived rather than written down. The front page quotes this number, and a
+ * hand-maintained one had already gone stale twice by the time anyone noticed.
+ */
+export const SOUND_CHANGE_COUNT = new Set(
+  (['germanic', 'romance'] as const).flatMap((lineage) =>
+    stagesFor(lineage).flatMap((stage) => stage.changes.map((c) => `${stage.id}:${c.id}`)),
+  ),
+).size
+
 /** Every stage's public metadata, for building a legend without running anything. */
 export function stageIndex(lineage: Lineage) {
   return stagesFor(lineage).map((s) => ({

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { reconstruct } from './engine'
+import { reconstruct, SOUND_CHANGE_COUNT } from './engine'
 import type { Lineage, Reconstruction } from './engine'
 import { coinWord } from './ui/coin'
 import { StageCard } from './ui/StageCard'
@@ -61,8 +61,8 @@ export default function App() {
           Middle English, Old English, Proto-Germanic, all the way to Proto-Indo-European.
         </p>
         <p className="colophon-note">
-          No language model anywhere. Sound change is regular, so this is 126 rewrite rules applied
-          in order. The same word always gives the same answer.
+          No language model anywhere. Sound change is regular, so this is {SOUND_CHANGE_COUNT}{' '}
+          rewrite rules applied in order. The same word always gives the same answer.
         </p>
       </header>
 
