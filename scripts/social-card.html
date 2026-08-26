@@ -1,0 +1,145 @@
+<!doctype html>
+<!--
+  Source for public/social.png, the link-preview card. Rendered at 1200x630 by
+  scripts/build-social.mjs. Uses the vendored fonts and the site's own palette
+  so the preview and the page are unmistakably the same object.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face {
+        font-family: 'Cardo';
+        font-style: normal;
+        font-weight: 400;
+        src: url('../public/fonts/cardo-400-normal-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF;
+      }
+      @font-face {
+        font-family: 'Cardo';
+        font-style: normal;
+        font-weight: 400;
+        src: url('../public/fonts/cardo-400-normal-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF;
+      }
+      @font-face {
+        font-family: 'Cardo';
+        font-style: italic;
+        font-weight: 400;
+        src: url('../public/fonts/cardo-400-italic-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF;
+      }
+      @font-face {
+        font-family: 'Grenze Gotisch';
+        font-style: normal;
+        font-weight: 400;
+        src: url('../public/fonts/grenze-gotisch-400-normal-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF;
+      }
+
+      * { box-sizing: border-box; margin: 0; }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        background: oklch(96.5% 0.014 84);
+        color: oklch(27% 0.028 62);
+        font-family: 'Cardo', Georgia, serif;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 56px;
+        padding: 64px 76px;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-family: 'Grenze Gotisch', Georgia, serif;
+        font-size: 104px;
+        font-weight: 400;
+        line-height: 0.94;
+        letter-spacing: -0.015em;
+        margin-bottom: 34px;
+        max-width: 9ch;
+      }
+
+      .versal { color: oklch(63% 0.115 76); font-family: 'Cardo', serif; font-size: 0.9em; }
+
+      p {
+        font-size: 34px;
+        line-height: 1.4;
+        max-width: 20ch;
+        color: oklch(46% 0.03 66);
+      }
+
+      .tag {
+        margin-top: 36px;
+        font-size: 22px;
+        font-variant-caps: all-small-caps;
+        letter-spacing: 0.13em;
+        color: oklch(48% 0.165 32);
+        max-width: none;
+        white-space: nowrap;
+      }
+
+      /* The derivation, ruled like the page it comes from. The rule spans an
+         explicit row count — `1 / -1` resolves against implicit rows and lands
+         in the first row only. */
+      .column {
+        display: grid;
+        grid-template-columns: auto 8px auto;
+        gap: 20px 26px;
+      }
+
+      .bounding {
+        grid-column: 2;
+        grid-row: 1 / span 4;
+        background: linear-gradient(
+          to right,
+          oklch(84% 0.024 80) 0 1px,
+          transparent 1px 7px,
+          oklch(84% 0.024 80) 7px 8px
+        );
+      }
+
+      .date {
+        grid-column: 1;
+        text-align: right;
+        font-size: 18px;
+        font-variant-caps: all-small-caps;
+        letter-spacing: 0.09em;
+        color: oklch(48% 0.165 32);
+        align-self: center;
+      }
+
+      .form { grid-column: 3; font-size: 46px; line-height: 1.1; }
+      .gold { color: oklch(63% 0.115 76); }
+      .blue { color: oklch(41% 0.13 262); }
+      .red { color: oklch(48% 0.165 32); }
+      .paraph { font-size: 0.62em; margin-right: 0.3em; vertical-align: 0.1em; }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>False <span class="versal">*</span>Reconstructor</h1>
+      <p>Etymologies for words that never existed.</p>
+      <p class="tag">No AI · 126 real sound laws · run backwards</p>
+    </div>
+
+    <div class="column">
+      <div class="bounding"></div>
+
+      <div class="date">today</div>
+      <div class="form"><span class="paraph red">¶</span>flarn</div>
+
+      <div class="date">c. 900</div>
+      <div class="form"><span class="paraph blue">¶</span>flærn</div>
+
+      <div class="date">c. 1 CE</div>
+      <div class="form"><span class="paraph red">¶</span><span class="gold">*</span>flarnaz</div>
+
+      <div class="date">c. 4000 BC</div>
+      <div class="form"><span class="paraph blue">¶</span><span class="gold">*</span>plórnos-</div>
+    </div>
+  </body>
+</html>

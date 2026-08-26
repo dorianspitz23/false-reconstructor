@@ -112,6 +112,17 @@ Type is [Cardo](https://fonts.google.com/specimen/Cardo) — drawn for classicis
 
 No monospace anywhere. Phonetic transcription belongs to the scholarly register, not the terminal register.
 
+**The fonts are vendored, not linked.** The page makes no third-party request of any kind — a Google Fonts `<link>` would hand every visitor's IP to Google, which a German court ruled a GDPR violation in 2022. `node scripts/fetch-fonts.mjs` regenerates `public/fonts/` and `src/fonts.css` from upstream; only the `latin` and `latin-ext` subsets ship, because `latin-ext` spans U+0100–02BA and that is what carries the IPA.
+
+## Privacy and data
+
+There is nothing to leak, by construction:
+
+- **No API keys**, because there is no API. Two runtime dependencies: `react` and `react-dom`.
+- **No network calls.** No `fetch`, no telemetry, no analytics, no fonts CDN. Open the network tab and it goes quiet after the page loads.
+- **No backend.** The whole engine is a few hundred lines of pure functions running in your tab. It works with the wifi off.
+- **Nothing is logged**, because there is nowhere to log it to. The word you type is in the URL and stays in your browser.
+
 ## Adding a sound change
 
 The rules are data, in `src/engine/stages/`. To add one:

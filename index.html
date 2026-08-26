@@ -11,18 +11,31 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f7f1e4" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.92em' font-size='88' fill='%23a03d20'>&#42;</text></svg>" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <!--
-      Cardo was drawn for classicists, medievalists and linguists — it carries
-      thorn, eth, ash, yogh, macrons and a full IPA range, which is the entire
-      character set this page needs. Grenze Gotisch is a blackletter-roman
-      hybrid: medieval in the joints, still readable at display size.
+      Fonts are vendored in public/fonts and declared in src/fonts.css, so this
+      page makes no third-party request of any kind. Cardo was drawn for
+      classicists, medievalists and linguists and carries thorn, eth, ash,
+      macrons and the IPA range; Grenze Gotisch is a blackletter-roman hybrid
+      for the masthead. Regenerate with `node scripts/fetch-fonts.mjs`.
     -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Grenze+Gotisch:wght@400;500&display=swap"
-      rel="stylesheet"
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="False Reconstructor" />
+    <meta property="og:title" content="False Reconstructor" />
+    <meta
+      property="og:description"
+      content="Type a word English never had. Real historical sound laws run backwards through it, to a Proto-Indo-European root. No AI — just the comparative method in reverse."
     />
+    <meta property="og:url" content="https://dorianspitz23.github.io/false-reconstructor/" />
+    <meta property="og:image" content="https://dorianspitz23.github.io/false-reconstructor/social.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The word flarn traced back through Old English flærn to Proto-Indo-European *plórnos-"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>
