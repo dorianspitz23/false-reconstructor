@@ -17,7 +17,7 @@ import type { Lineage, Reconstruction, Stage, StageResult, Word } from './types'
 
 export * from './types'
 export { classify } from './classify'
-export { graphemesToPhonemes, normalize, explain } from './g2p'
+export { graphemesToPhonemes, normalize, explain, G2P_RULE_COUNT } from './g2p'
 export { compile, applyRule, ipa } from './rules'
 
 const SHARED: Stage[] = [MODERN_TO_EARLY_MODERN, EARLY_MODERN_TO_MIDDLE]

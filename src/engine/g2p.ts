@@ -199,6 +199,13 @@ const RULES: G2PRule[] = [
   { g: 'z', ipa: ['z'] },
 ]
 
+/**
+ * How many grapheme rules there are. Quoted in the README, and derived here for
+ * the same reason the sound-change count is — a number written down in prose
+ * goes stale the first time anyone adds a rule.
+ */
+export const G2P_RULE_COUNT = RULES.length
+
 /** Trim a word down to the letters the engine can read. */
 export function normalize(input: string): string {
   return input

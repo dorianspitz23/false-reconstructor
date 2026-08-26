@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { reconstruct, SOUND_CHANGE_COUNT, stagesFor } from '../src/engine'
+import { G2P_RULE_COUNT, reconstruct, SOUND_CHANGE_COUNT, stagesFor } from '../src/engine'
 
 /**
  * The rule count is quoted in prose in three places. The app derives its own
@@ -23,9 +23,13 @@ describe('the quoted rule count matches the ruleset', () => {
 
   it('matches the README', () => {
     const readme = read('README.md')
-    const quoted = readme.match(/So this is a table\. (\d+) of them/)?.[1]
-    expect(quoted, 'README no longer states the count in the expected sentence').toBeDefined()
-    expect(Number(quoted)).toBe(SOUND_CHANGE_COUNT)
+    const sound = readme.match(/So this is a table\. (\d+) of them/)?.[1]
+    expect(sound, 'README no longer states the count in the expected sentence').toBeDefined()
+    expect(Number(sound)).toBe(SOUND_CHANGE_COUNT)
+
+    const g2p = readme.match(/plus (\d+) rules for turning spelling into sound/)?.[1]
+    expect(g2p, 'README no longer states the grapheme rule count').toBeDefined()
+    expect(Number(g2p)).toBe(G2P_RULE_COUNT)
   })
 
   it('matches the social card', () => {
