@@ -14,7 +14,7 @@ This was [asked for on r/SomebodyMakeThis](https://www.reddit.com/r/SomebodyMake
 
 They were right and the reply was wrong. Sound change is the most regular thing in historical linguistics: the **Neogrammarian hypothesis** — that sound laws apply without exception in a given time and place — is what makes the comparative method work at all. Grimm's Law is not a vibe. It is a table, and it has been a table since 1822.
 
-So this is a table. Roughly 150 of them.
+So this is a table. 126 of them, plus 102 rules for turning spelling into sound.
 
 The difference matters in practice, not just in principle:
 
