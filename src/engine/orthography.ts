@@ -107,7 +107,11 @@ const PWG: Table = {
   a: 'a', aː: 'ā', e: 'e', eː: 'ē', i: 'i', iː: 'ī', o: 'o', oː: 'ō', u: 'u', uː: 'ū',
   ai: 'ai', au: 'au', eu: 'eu', iu: 'iu', æ: 'a', ə: 'a',
   θ: 'þ', ð: 'd', β: 'b', ɣ: 'g', x: 'h', xʷ: 'hw', kʷ: 'kw', ɡʷ: 'gw',
-  k: 'k', ɡ: 'g', j: 'j', w: 'w', z: 's', v: 'b', ʃ: 'sk', tʃ: 'k', dʒ: 'g',
+  k: 'k', ɡ: 'g', j: 'j', w: 'w', v: 'b', ʃ: 'sk', tʃ: 'k', dʒ: 'g',
+  // Written *z, per the standard Proto-West-Germanic convention. The derivation
+  // itself turns /z/ into /s/, so this only surfaces on the rhotacism gloss —
+  // where rendering it as `s` would contradict the note beside it.
+  z: 'z',
   ll: 'll', mm: 'mm', nn: 'nn', pp: 'pp', tt: 'tt', kk: 'kk', ss: 'ss', rr: 'rr',
   bb: 'bb', dd: 'dd', ɡɡ: 'gg',
 }

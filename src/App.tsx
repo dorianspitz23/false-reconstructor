@@ -4,7 +4,7 @@ import type { Lineage, Reconstruction } from './engine'
 import { coinWord } from './ui/coin'
 import { StageCard } from './ui/StageCard'
 
-const EXAMPLES = ['flarn', 'sprockle', 'knurst', 'thwaggle', 'blorth', 'prolation']
+const EXAMPLES = ['flarn', 'sprockle', 'knurst', 'thwaggle', 'prolation']
 
 function readUrl(): { word: string; lineage?: Lineage } {
   const params = new URLSearchParams(window.location.search)
@@ -39,81 +39,90 @@ export default function App() {
     window.history.replaceState(null, '', next ? `?${next}` : window.location.pathname)
   }, [query, override])
 
-  const submit = useCallback(
-    (word: string, lineage?: Lineage) => {
-      setDraft(word)
-      setQuery(word)
-      setOverride(lineage)
-    },
-    [],
-  )
+  const submit = useCallback((word: string, lineage?: Lineage) => {
+    setDraft(word)
+    setQuery(word)
+    setOverride(lineage)
+  }, [])
 
   const data = result.data
 
   return (
-    <div className="page">
+    <div className="leaf">
       <header className="masthead">
         <h1>
-          False <span className="star">*</span>Reconstructor
+          False{' '}
+          <span className="titleword">
+            <span className="versal">*</span>Reconstructor
+          </span>
         </h1>
         <p className="standfirst">
           Type a word English never had. Real historical sound laws run backwards through it —
           Middle English, Old English, Proto-Germanic, all the way to Proto-Indo-European.
         </p>
-        <p className="disclaimer">
-          No AI, no guessing. Just the comparative method in reverse, so the same word always gives
-          the same answer.
+        <p className="colophon-note">
+          No language model anywhere. Sound change is regular, so this is 126 rewrite rules applied
+          in order. The same word always gives the same answer.
         </p>
       </header>
 
       <form
-        className="search"
+        className="quill"
         onSubmit={(e) => {
           e.preventDefault()
           submit(draft.trim(), override)
         }}
       >
-        <input
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="flarn"
-          aria-label="A word that doesn't exist"
-          autoComplete="off"
-          autoCapitalize="off"
-          spellCheck={false}
-          maxLength={24}
-        />
-        <button type="submit" className="go">
-          Reconstruct
-        </button>
-        <button
-          type="button"
-          className="dice"
-          onClick={() => submit(coinWord(), undefined)}
-          title="Coin a word for me"
-        >
-          Coin one
-        </button>
+        <label htmlFor="word">A word English never had</label>
+        <div className="quill-row">
+          <input
+            id="word"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder="flarn"
+            autoComplete="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            maxLength={24}
+          />
+          <button type="submit" className="primary">
+            Reconstruct
+          </button>
+          <button type="button" onClick={() => submit(coinWord(), undefined)}>
+            Coin one
+          </button>
+        </div>
       </form>
 
-      {!query && (
-        <div className="examples">
-          <span>Try</span>
-          {EXAMPLES.map((w) => (
-            <button key={w} type="button" onClick={() => submit(w, undefined)}>
-              {w}
-            </button>
-          ))}
-        </div>
+      {!query && !result.error && (
+        <section className="unwritten">
+          <p>
+            Anything will do, so long as it isn&rsquo;t already a word. The engine has no dictionary
+            — it works entirely from the shape of what you type.
+          </p>
+          <ul>
+            {EXAMPLES.map((w) => (
+              <li key={w}>
+                <button type="button" onClick={() => submit(w, undefined)}>
+                  {w}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
-      {result.error && <p className="error">{result.error}</p>}
+      {result.error && (
+        <p className="scribal-error" role="alert">
+          {result.error}
+        </p>
+      )}
 
       {data && (
         <main>
-          <div className="lineage">
-            <p className="reason">{data.lineageReason}</p>
-            <div className="toggle" role="group" aria-label="Lineage">
+          <div className="attribution">
+            <p>{data.lineageReason}</p>
+            <div className="hand" role="group" aria-label="Lineage">
               {(['germanic', 'romance'] as const).map((l) => (
                 <button
                   key={l}
@@ -128,28 +137,25 @@ export default function App() {
             </div>
           </div>
 
-          <ol className="timeline">
+          <ol className="column">
             {data.stages.map((s, i) => (
-              <StageCard key={s.stage.id} result={s} first={i === 0} />
+              <StageCard key={s.stage.id} result={s} index={i} />
             ))}
           </ol>
 
-          <footer className="coda">
-            <p>
-              Every form below the first is what <em>{data.input}</em> would have looked like, if it
-              had been there all along.
-            </p>
-          </footer>
+          <p className="explicit">
+            Thus <em>{data.input}</em>, had it ever been said.
+          </p>
         </main>
       )}
 
-      <footer className="colophon">
+      <footer className="foot">
         <a href="https://github.com/dorianspitz23/false-reconstructor">Source on GitHub</a>
-        <span>·</span>
+        <span aria-hidden="true">·</span>
         <span>MIT licensed</span>
-        <span>·</span>
+        <span aria-hidden="true">·</span>
         <span>
-          Built from an idea on{' '}
+          From an idea on{' '}
           <a href="https://www.reddit.com/r/SomebodyMakeThis/comments/1vq0snc/false_reconstructor/">
             r/SomebodyMakeThis
           </a>

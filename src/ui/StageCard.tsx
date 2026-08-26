@@ -1,30 +1,55 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import type { StageResult } from '../engine'
 
 interface Props {
   result: StageResult
-  first: boolean
+  index: number
 }
 
-export function StageCard({ result, first }: Props) {
+/**
+ * One entry in the ruled column.
+ *
+ * The layout follows manuscript apparatus rather than card conventions: the date
+ * sits in the margin the way a running head did, the paraph mark opens the
+ * entry, and disagreements in the scholarship hang off the side as a glossed
+ * note with a manicule — the pointing hand a medieval reader drew when they
+ * wanted to flag a passage.
+ */
+export function StageCard({ result, index }: Props) {
   const [open, setOpen] = useState(false)
   const { stage, form, ipa, applied, ambiguities } = result
 
+  // Paraph marks alternated red and blue down a manuscript page. Keeping that
+  // alternation gives the column a pulse as the eye travels backwards in time.
+  const ink = index % 2 === 0 ? 'vermilion' : 'ultramarine'
+
   return (
-    <li className={`stage ${first ? 'is-modern' : ''}`}>
-      <div className="rail" aria-hidden="true">
-        <span className="dot" style={{ opacity: 0.35 + stage.confidence * 0.65 }} />
-      </div>
+    <li className="entry" style={{ '--i': index } as CSSProperties}>
+      <p className="marginal-date">{stage.period}</p>
 
-      <div className="body">
-        <div className="meta">
-          <span className="name">{stage.name}</span>
-          <span className="period">{stage.period}</span>
-          {stage.reconstructed && <span className="tag">reconstructed</span>}
-        </div>
+      <div className="bounding" aria-hidden="true" />
 
-        <p className="form" style={{ opacity: 0.55 + stage.confidence * 0.45 }}>
-          {form}
+      <div className="written">
+        <h2 className="rubric">
+          <span className={`paraph ${ink}`} aria-hidden="true">
+            ¶
+          </span>
+          {stage.name}
+          {stage.reconstructed && <em className="unattested"> unattested</em>}
+        </h2>
+
+        {/* Gold is reserved for the asterisk — the mark for a form nobody ever
+            wrote down. Split it off so the metal lands only on the mark. */}
+        <p className="form">
+          {stage.reconstructed && form.startsWith('*') ? (
+            <>
+              <span className="versal">*</span>
+              {form.slice(1)}
+            </>
+          ) : (
+            form
+          )}
         </p>
         <p className="ipa">/{ipa}/</p>
         <p className="blurb">{stage.blurb}</p>
@@ -32,20 +57,23 @@ export function StageCard({ result, first }: Props) {
         {applied.length > 0 && (
           <div className="changes">
             <button type="button" onClick={() => setOpen(!open)} aria-expanded={open}>
-              {open ? '−' : '+'} {applied.length} sound {applied.length === 1 ? 'change' : 'changes'}
+              {applied.length} sound {applied.length === 1 ? 'change' : 'changes'}
             </button>
 
             {open && (
               <ol className="trace">
                 {applied.map((c, i) => (
                   <li key={`${c.id}-${i}`}>
-                    <span className="law">{c.name}</span>
-                    <span className="step">
-                      <span className="from">{c.before}</span>
-                      <span className="arrow">←</span>
-                      <span className="to">{c.after}</span>
-                    </span>
-                    {c.note && <span className="note">{c.note}</span>}
+                    <h3>{c.name}</h3>
+                    <p className="step">
+                      <span>{c.after}</span>
+                      <span className="whence" aria-hidden="true">
+                        ⟵
+                      </span>
+                      <span className="whence-label">from</span>
+                      <span>{c.before}</span>
+                    </p>
+                    {c.note && <p className="note">{c.note}</p>}
                   </li>
                 ))}
               </ol>
@@ -53,17 +81,16 @@ export function StageCard({ result, first }: Props) {
           </div>
         )}
 
-        {ambiguities.length > 0 && (
-          <ul className="ambiguities">
-            {ambiguities.map((a) => (
-              <li key={a.name}>
-                <span className="alt-name">{a.name}</span>
-                <span className="alt-form">{a.alternative}</span>
-                <span className="alt-reason">{a.reason}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        {ambiguities.map((a) => (
+          <aside className="gloss" key={a.name}>
+            <span className="manicule" aria-hidden="true">
+              ☞
+            </span>
+            <h3>{a.name}</h3>
+            <p className="gloss-form">{a.alternative}</p>
+            <p className="gloss-reason">{a.reason}</p>
+          </aside>
+        ))}
       </div>
     </li>
   )

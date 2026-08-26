@@ -50,7 +50,7 @@ This is the whole reason to build it with rules. You can grade it.
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 83 tests
+npm test         # 84 tests
 npm run build
 ```
 
@@ -97,6 +97,20 @@ Sound laws implemented, by stage:
 | Proto-Germanic | c. 1 CE | Loss of final *\*-z*, *\*ē₁* → *\*ā*, fortition of *\*đ* |
 | Proto-Indo-European | c. 4000 BC | **Grimm's Law** + the /s/ exception, syllabic sonorants, vowel mergers, Verner's Law *(flagged)*, laryngeals *(flagged)* |
 | Old French → Latin → Proto-Italic | c. 1200 → 500 BC | Palatalisation, intervocalic lenition, diphthongisation, loss of case endings, the *-tiōnem* suffix, **rhotacism** |
+
+## The interface
+
+The page is a leaf of a manuscript, and the scribal apparatus does real work rather than being worn as costume:
+
+- **The marginal date** is a running head, sitting in the margin where a scribe put it.
+- **The double bounding line** rules the column. Reading down it is travelling backwards in time.
+- **Paraph marks** (¶) open each entry, alternating vermilion and ultramarine exactly as they did on a real page.
+- **The manicule** (☞) is a pointing hand — what a medieval reader drew beside a passage worth arguing about. Here it flags the reconstructions the evidence cannot settle.
+- **Gold is reserved for the asterisk**, the linguist's mark for a form nobody ever wrote down. It appears nowhere else.
+
+Type is [Cardo](https://fonts.google.com/specimen/Cardo) — drawn for classicists, medievalists and linguists, so it already carries thorn, eth, ash, macrons and a full IPA range — paired with [Grenze Gotisch](https://fonts.google.com/specimen/Grenze+Gotisch), a blackletter-roman hybrid, for the masthead. Colours are iron-gall ink, vermilion and ultramarine on vellum, in OKLCH.
+
+No monospace anywhere. Phonetic transcription belongs to the scholarly register, not the terminal register.
 
 ## Adding a sound change
 

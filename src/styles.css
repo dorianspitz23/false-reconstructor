@@ -1,322 +1,418 @@
 /*
- * The look is meant to sit somewhere between a philology handbook and a core
- * sample: warm paper-on-dark, a serif for the word forms, mono for anything
- * phonetic, and a vertical rail down the page so reading downwards feels like
- * digging backwards.
+ * The page is a leaf of a manuscript.
+ *
+ * Every device here is a real scribal tool doing the job it actually did: the
+ * date is a running head in the margin, the paraph opens an entry, the double
+ * bounding line rules the column, and the manicule flags a passage the
+ * scholarship disagrees about. Nothing is worn as costume.
  */
 
 :root {
-  --ink: #ece5d8;
-  --ink-dim: #9a9184;
-  --ink-faint: #6b6459;
-  --bg: #0e0d0c;
-  --bg-raised: #171613;
-  --rule: #2a2723;
-  --gold: #c9a227;
-  --gold-dim: #8a7326;
-  --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
-  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /*
+   * Three inks and a metal, on vellum. Neutrals are tinted toward the parchment
+   * hue (~82) rather than toward a stock warm-grey, so the surfaces and the
+   * rubric belong to the same page.
+   */
+  --vellum: oklch(96.5% 0.014 84);
+  --vellum-deep: oklch(93% 0.021 82);
+  --ink: oklch(27% 0.028 62);
+  --ink-soft: oklch(46% 0.03 66);
+  --ink-faint: oklch(58% 0.028 70);
+  --rule: oklch(84% 0.024 80);
+  --rule-hair: oklch(89% 0.018 82);
+  --vermilion: oklch(48% 0.165 32);
+  --ultramarine: oklch(41% 0.13 262);
+  --gold: oklch(63% 0.115 76);
+
+  /* Perfect-fourth-ish scale, five steps, nothing in between. */
+  --text-rubric: 0.8125rem;
+  --text-small: 1rem;
+  --text-body: 1.25rem;
+  --text-form: clamp(2.25rem, 6vw, 3.25rem);
+  --text-title: clamp(2.6rem, 8.5vw, 4.5rem);
+
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  --display: 'Grenze Gotisch', 'Cardo', Georgia, serif;
+  --body: 'Cardo', 'Junicode', 'Gentium Book Plus', Georgia, 'Times New Roman', serif;
+
+  /* Exponential deceleration — things settle, they do not bounce. */
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  /* The margin column that holds the running head. */
+  --margin-col: 6.5rem;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html,
+html {
+  color-scheme: light;
+}
+
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--vellum);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--body);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  font-kerning: normal;
   -webkit-font-smoothing: antialiased;
 }
 
-body {
-  /* A very faint warm vignette, so the page does not read as flat black. */
-  background-image: radial-gradient(120% 80% at 50% 0%, #1a1713 0%, transparent 60%);
-  background-repeat: no-repeat;
-}
-
-.page {
-  max-width: 46rem;
+.leaf {
+  max-width: 50rem;
   margin: 0 auto;
-  padding: 3.5rem 1.25rem 4rem;
+  padding: var(--space-4xl) var(--space-lg) var(--space-3xl);
 }
 
 /* ---------------------------------------------------------------- masthead */
 
 .masthead h1 {
-  font-size: clamp(2.2rem, 7vw, 3.4rem);
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  margin: 0 0 0.6rem;
-  line-height: 1.05;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--text-title);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-lg);
+  max-width: 20ch;
+  text-wrap: balance;
 }
 
-.star {
+/* The asterisk belongs to the word it marks — never let it start a line alone. */
+.titleword {
+  white-space: nowrap;
+}
+
+/*
+ * The asterisk is the linguist's mark for a form nobody ever wrote down, and
+ * gold leaf was reserved for what mattered most on a page. It is the only place
+ * the metal appears at this size.
+ */
+.versal {
   color: var(--gold);
-  font-family: var(--mono);
-  font-size: 0.7em;
-  vertical-align: 0.12em;
+  font-family: var(--body);
+  font-size: 0.92em;
+  line-height: 0;
+  vertical-align: -0.04em;
+  margin-right: 0.03em;
 }
 
 .standfirst {
-  font-size: 1.15rem;
+  font-size: var(--text-body);
   line-height: 1.55;
-  color: var(--ink-dim);
-  margin: 0 0 0.5rem;
-  max-width: 34rem;
+  margin: 0 0 var(--space-md);
+  max-width: 54ch;
 }
 
-.disclaimer {
-  font-family: var(--mono);
-  font-size: 0.72rem;
+.colophon-note {
+  font-size: var(--text-small);
   line-height: 1.6;
-  color: var(--ink-faint);
+  font-style: italic;
+  color: var(--ink-soft);
   margin: 0;
-  max-width: 34rem;
+  max-width: 56ch;
 }
 
-/* ------------------------------------------------------------------ search */
+/* ------------------------------------------------------------------- quill */
 
-.search {
+.quill {
+  margin: var(--space-3xl) 0 var(--space-xl);
+}
+
+.quill label {
+  display: block;
+  font-size: var(--text-rubric);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.12em;
+  color: var(--vermilion);
+  margin-bottom: var(--space-xs);
+}
+
+.quill-row {
   display: flex;
-  gap: 0.5rem;
-  margin: 2.25rem 0 1rem;
+  align-items: flex-end;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }
 
-.search input {
-  flex: 1 1 12rem;
+/*
+ * Written on a ruled line rather than typed into a box. The baseline thickens
+ * on focus the way a nib pressed harder.
+ */
+.quill input {
+  flex: 1 1 14rem;
   min-width: 0;
-  background: var(--bg-raised);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: 1.35rem;
-  padding: 0.6rem 0.85rem;
-  outline: none;
-  transition: border-color 0.15s ease;
-}
-
-.search input:focus {
-  border-color: var(--gold-dim);
-}
-
-.search input::placeholder {
-  color: var(--ink-faint);
-}
-
-.search button {
-  border-radius: 3px;
-  border: 1px solid var(--rule);
-  background: var(--bg-raised);
-  color: var(--ink);
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  padding: 0 1rem;
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.search button:hover {
-  border-color: var(--gold-dim);
-  color: var(--gold);
-}
-
-.search .go {
-  border-color: var(--gold-dim);
-  color: var(--gold);
-}
-
-/* ---------------------------------------------------------------- examples */
-
-.examples {
-  display: flex;
-  gap: 0.4rem;
-  align-items: center;
-  flex-wrap: wrap;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--ink-faint);
-}
-
-.examples button {
   background: none;
   border: none;
-  border-bottom: 1px dotted var(--ink-faint);
-  color: var(--ink-dim);
-  font-family: var(--serif);
-  font-size: 1rem;
-  padding: 0 0 1px;
-  cursor: pointer;
+  border-bottom: 2px solid var(--rule);
+  border-radius: 0;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: clamp(1.6rem, 4.5vw, 2.1rem);
+  line-height: 1.3;
+  padding: 0 0 var(--space-2xs);
+  outline: none;
+  transition: border-color 220ms var(--ease-out-quart);
 }
 
-.examples button:hover {
-  color: var(--gold);
-  border-bottom-color: var(--gold);
+.quill input:focus-visible {
+  border-bottom-color: var(--vermilion);
 }
 
-.error {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: #d98b6a;
+.quill input::placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
 }
 
-/* ----------------------------------------------------------------- lineage */
-
-.lineage {
-  display: flex;
-  gap: 1rem;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 2rem 0 0.5rem;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid var(--rule);
-}
-
-.reason {
-  font-size: 0.95rem;
-  color: var(--ink-dim);
-  margin: 0;
-  flex: 1 1 16rem;
-}
-
-.toggle {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.toggle button {
+.quill button {
   background: none;
   border: 1px solid var(--rule);
-  border-radius: 3px;
-  color: var(--ink-faint);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  padding: 0.3rem 0.6rem;
+  border-radius: 0;
+  color: var(--ink-soft);
+  font-family: var(--body);
+  font-size: var(--text-rubric);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  padding: var(--space-xs) var(--space-md);
   cursor: pointer;
+  transition: color 160ms var(--ease-out-quart), border-color 160ms var(--ease-out-quart),
+    background-color 160ms var(--ease-out-quart);
 }
 
-.toggle button.on {
-  border-color: var(--gold-dim);
-  color: var(--gold);
+.quill button:hover {
+  background: var(--vellum-deep);
+  border-color: var(--ink-faint);
+  color: var(--ink);
 }
 
-/* ---------------------------------------------------------------- timeline */
+.quill button.primary {
+  border-color: var(--vermilion);
+  color: var(--vermilion);
+}
 
-.timeline {
+.quill button.primary:hover {
+  background: var(--vermilion);
+  color: var(--vellum);
+}
+
+/* --------------------------------------------------------- the empty state */
+
+.unwritten p {
+  font-size: var(--text-small);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-md);
+  max-width: 56ch;
+}
+
+.unwritten ul {
+  display: flex;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.stage {
-  display: grid;
-  grid-template-columns: 1.75rem 1fr;
-  gap: 0 0.5rem;
+.unwritten button {
+  background: none;
+  border: none;
+  padding: var(--space-2xs) 0;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.45rem;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: color 160ms var(--ease-out-quart), border-color 160ms var(--ease-out-quart);
 }
 
-/* The rail is a single continuous line drawn by each row's own border. */
-.rail {
-  position: relative;
-  border-left: 1px solid var(--rule);
-  margin-left: 0.5rem;
+.unwritten button:hover {
+  color: var(--vermilion);
+  border-bottom-color: var(--vermilion);
 }
 
-.stage:first-child .rail {
-  margin-top: 1.6rem;
-  height: calc(100% - 1.6rem);
+.scribal-error {
+  font-size: var(--text-small);
+  font-style: italic;
+  color: var(--vermilion);
+  margin: var(--space-lg) 0 0;
 }
 
-.stage:last-child .rail {
-  height: 1.6rem;
+/* --------------------------------------------------------------- ascription */
+
+.attribution {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: var(--space-2xl) 0 var(--space-xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--rule);
 }
 
-.dot {
-  position: absolute;
-  left: -4.5px;
-  top: 1.45rem;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--gold);
+.attribution p {
+  font-size: var(--text-small);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0;
+  flex: 1 1 18rem;
+  max-width: 52ch;
 }
 
-.stage:first-child .dot {
-  top: -0.15rem;
-}
-
-.body {
-  padding: 1.15rem 0 1.6rem;
-  min-width: 0;
-}
-
-.meta {
+.hand {
   display: flex;
   align-items: baseline;
-  gap: 0.6rem;
-  flex-wrap: wrap;
+  gap: var(--space-sm);
 }
 
-.name {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
-
-.period {
-  font-family: var(--mono);
-  font-size: 0.7rem;
+.hand button {
+  background: none;
+  border: none;
+  padding: 0;
   color: var(--ink-faint);
+  font-family: var(--body);
+  font-size: var(--text-rubric);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: color 160ms var(--ease-out-quart), border-color 160ms var(--ease-out-quart);
 }
 
-.tag {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  border: 1px solid var(--gold-dim);
-  border-radius: 2px;
-  padding: 0.05rem 0.3rem;
-}
-
-.form {
-  font-size: clamp(1.9rem, 6vw, 2.6rem);
-  line-height: 1.15;
-  margin: 0.35rem 0 0.2rem;
-  word-break: break-word;
-}
-
-.is-modern .form {
+.hand button:hover {
   color: var(--ink);
 }
 
+.hand button.on {
+  color: var(--vermilion);
+  border-bottom-color: var(--vermilion);
+}
+
+/* ------------------------------------------------------------- ruled column */
+
+.column {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: var(--margin-col) 8px minmax(0, 1fr);
+  column-gap: var(--space-lg);
+}
+
+/* The running head, hung in the margin exactly as a scribe placed it. */
+.marginal-date {
+  grid-column: 1;
+  margin: 0;
+  /* Same top padding and type size as the rubric it sits beside, so the two
+     share a baseline without either needing a nudge. */
+  padding-top: var(--space-md);
+  text-align: right;
+  font-size: var(--text-rubric);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  color: var(--vermilion);
+  white-space: nowrap;
+}
+
+/*
+ * The double bounding line that rules the text column. Two hairlines, drawn as
+ * one background so the pair reads as a single ruling instrument.
+ */
+.bounding {
+  grid-column: 2;
+  background: linear-gradient(
+    to right,
+    var(--rule) 0 1px,
+    transparent 1px 7px,
+    var(--rule) 7px 8px
+  );
+}
+
+.written {
+  grid-column: 3;
+  padding: var(--space-md) 0 var(--space-2xl);
+  min-width: 0;
+}
+
+.rubric {
+  font-family: var(--body);
+  font-size: var(--text-rubric);
+  font-weight: 400;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  margin: 0;
+  text-indent: -1.1em;
+  padding-left: 1.1em;
+}
+
+/* Paraphs alternated red and blue down the page. Keeping the alternation gives
+   the column a pulse as the eye travels backwards through time. */
+.paraph {
+  font-size: 1.15em;
+  margin-right: 0.35em;
+  letter-spacing: 0;
+}
+
+.paraph.vermilion {
+  color: var(--vermilion);
+}
+
+.paraph.ultramarine {
+  color: var(--ultramarine);
+}
+
+.unattested {
+  color: var(--gold);
+  font-style: italic;
+  letter-spacing: 0.06em;
+}
+
+.form {
+  font-size: var(--text-form);
+  line-height: 1.1;
+  margin: var(--space-xs) 0 var(--space-2xs);
+  word-break: break-word;
+}
+
+/*
+ * Spelling often stands still while pronunciation moves — `knight` looks the
+ * same in 1600 and 1400. On those stages the transcription is the only thing
+ * that changed, so it carries the finding and is weighted accordingly.
+ */
 .ipa {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--gold-dim);
-  margin: 0 0 0.5rem;
-  word-break: break-all;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--ink);
+  margin: 0 0 var(--space-sm);
+  word-break: break-word;
 }
 
 .blurb {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--ink-dim);
   margin: 0;
-  max-width: 32rem;
+  max-width: 58ch;
+  color: var(--ink);
 }
 
-/* ----------------------------------------------------------------- changes */
+/* ------------------------------------------------------------------- trace */
 
 .changes {
-  margin-top: 0.85rem;
+  margin-top: var(--space-md);
 }
 
 .changes > button {
@@ -324,147 +420,242 @@ body {
   border: none;
   padding: 0;
   color: var(--ink-faint);
-  font-family: var(--mono);
-  font-size: 0.72rem;
+  font-family: var(--body);
+  font-size: var(--text-rubric);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
   cursor: pointer;
+  border-bottom: 1px solid var(--rule);
+  transition: color 160ms var(--ease-out-quart), border-color 160ms var(--ease-out-quart);
 }
 
 .changes > button:hover {
-  color: var(--gold);
+  color: var(--vermilion);
+  border-bottom-color: var(--vermilion);
 }
 
 .trace {
   list-style: none;
-  margin: 0.7rem 0 0;
-  padding: 0 0 0 0.9rem;
-  border-left: 1px solid var(--rule);
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  counter-reset: law;
 }
 
-.trace li {
-  margin-bottom: 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+.trace > li {
+  counter-increment: law;
+  padding: var(--space-sm) 0 var(--space-sm) 2.4rem;
+  position: relative;
+  border-top: 1px solid var(--rule-hair);
+  max-width: 52ch;
 }
 
-.law {
-  font-size: 0.95rem;
+/* A numbered hand rather than a coloured stripe: the order of the laws is the
+   thing that matters, so the number is what gets drawn. */
+.trace > li::before {
+  content: counter(law);
+  position: absolute;
+  left: 0;
+  top: var(--space-sm);
+  width: 1.6rem;
+  text-align: right;
+  font-size: var(--text-small);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.trace h3 {
+  font-size: var(--text-small);
+  font-weight: 700;
+  margin: 0;
   color: var(--ink);
 }
 
 .step {
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  color: var(--ink-faint);
   display: flex;
-  gap: 0.45rem;
+  align-items: baseline;
+  gap: 0.5em;
   flex-wrap: wrap;
+  font-size: var(--text-small);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: var(--space-2xs) 0 0;
 }
 
-.step .to {
-  color: var(--gold-dim);
+.step > span:first-child {
+  color: var(--vermilion);
 }
 
-.arrow {
+.whence {
   color: var(--rule);
+  font-style: normal;
+}
+
+/* Kept for screen readers and text-only rendering; the arrow carries it visually. */
+.whence-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .note {
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: var(--ink-faint);
-  max-width: 30rem;
+  font-size: var(--text-small);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: var(--space-2xs) 0 0;
 }
 
-/* ------------------------------------------------------------ ambiguities */
+/* ------------------------------------------------------------------- gloss */
 
-.ambiguities {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0.75rem 0.9rem;
-  background: var(--bg-raised);
-  border-left: 2px solid var(--gold-dim);
-  border-radius: 0 3px 3px 0;
+/*
+ * A marginal note in the scribal sense: something the scholarship cannot settle.
+ * The manicule hangs outside the measure, the way a reader's pointing hand did.
+ */
+.gloss {
+  position: relative;
+  margin: var(--space-lg) 0 0;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--vellum-deep);
+  max-width: 52ch;
 }
 
-.ambiguities li + li {
-  margin-top: 0.9rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--rule);
+.manicule {
+  position: absolute;
+  left: -1.75rem;
+  top: var(--space-md);
+  font-size: 1.15rem;
+  line-height: 1.4;
+  color: var(--vermilion);
 }
 
-.alt-name {
-  display: block;
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  margin-bottom: 0.2rem;
-}
-
-.alt-form {
-  display: block;
-  font-size: 1.4rem;
-  color: var(--ink);
-  margin-bottom: 0.25rem;
-  word-break: break-word;
-}
-
-.alt-reason {
-  display: block;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: var(--ink-dim);
-}
-
-/* ------------------------------------------------------------------- coda */
-
-.coda {
-  margin-top: 1rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--rule);
-  color: var(--ink-faint);
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-.coda p {
+.gloss h3 {
+  font-size: var(--text-rubric);
+  font-weight: 400;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.12em;
+  color: var(--vermilion);
   margin: 0;
 }
 
-.colophon {
-  margin-top: 3.5rem;
-  padding-top: 1.25rem;
+.gloss-form {
+  font-size: 1.65rem;
+  line-height: 1.25;
+  margin: var(--space-2xs) 0 var(--space-xs);
+  word-break: break-word;
+}
+
+.gloss-reason {
+  font-size: var(--text-small);
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* -------------------------------------------------------------- the explicit */
+
+/* Manuscripts closed with an "explicit" — the scribe noting the work was done. */
+.explicit {
+  margin: var(--space-lg) 0 0;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--rule);
+  font-size: var(--text-small);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.foot {
+  margin-top: var(--space-4xl);
+  padding-top: var(--space-md);
   border-top: 1px solid var(--rule);
   display: flex;
-  gap: 0.55rem;
+  gap: 0.6rem;
   flex-wrap: wrap;
-  font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: var(--text-rubric);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
   color: var(--ink-faint);
 }
 
 a {
-  color: var(--ink-dim);
+  color: var(--ink-soft);
   text-decoration-color: var(--rule);
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
+  transition: color 160ms var(--ease-out-quart);
 }
 
 a:hover {
-  color: var(--gold);
+  color: var(--vermilion);
+  text-decoration-color: var(--vermilion);
 }
 
-@media (max-width: 30rem) {
-  .page {
-    padding-top: 2.25rem;
+:focus-visible {
+  outline: 2px solid var(--vermilion);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------ motion */
+
+/* One orchestrated moment: the column writes itself down the page on arrival. */
+@media (prefers-reduced-motion: no-preference) {
+  .entry {
+    animation: settle 620ms var(--ease-out-quart) backwards;
+    animation-delay: calc(var(--i) * 65ms);
   }
 
-  .stage {
-    grid-template-columns: 1.1rem 1fr;
+  @keyframes settle {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+}
+
+/* ------------------------------------------------------------- narrow leaf */
+
+/*
+ * Below the fold-width the margin cannot hold a running head, so the apparatus
+ * regroups: the date joins the rubric line and the bounding line moves to the
+ * outer edge. The column keeps its meaning; it just stops being a margin.
+ */
+@media (max-width: 40rem) {
+  .leaf {
+    padding-top: var(--space-2xl);
   }
 
-  .rail {
-    margin-left: 0.25rem;
+  .entry {
+    grid-template-columns: 8px minmax(0, 1fr);
+    column-gap: var(--space-md);
+  }
+
+  .marginal-date {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: left;
+    padding-top: var(--space-md);
+  }
+
+  .bounding {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  .written {
+    grid-column: 2;
+    grid-row: 2;
+    padding-top: var(--space-2xs);
+    padding-bottom: var(--space-xl);
+  }
+
+  .manicule {
+    position: static;
+    display: block;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .gloss {
+    padding: var(--space-md);
   }
 }

@@ -182,6 +182,15 @@ describe('invented words', () => {
     }
   })
 
+  it('shows the rhotacism alternative with the *z it describes', () => {
+    // The note says the /r/ could go back to *z, so the form beside it has to
+    // actually show a z — the West Germanic spelling convention writes it.
+    const pwg = at('blorth', 'pwg')
+    const rhotacism = pwg.ambiguities.find((a) => a.name === 'Rhotacism')
+    expect(rhotacism).toBeDefined()
+    expect(rhotacism!.alternative).toContain('z')
+  })
+
   it('reports which sound changes fired', () => {
     const r = reconstruct('knight')
     const names = r.stages.flatMap((s) => s.applied.map((a) => a.name))
