@@ -16,7 +16,7 @@ This was [asked for on r/SomebodyMakeThis](https://www.reddit.com/r/SomebodyMake
 
 They were right and the reply was wrong. Sound change is the most regular thing in historical linguistics: the **Neogrammarian hypothesis** — that sound laws apply without exception in a given time and place — is what makes the comparative method work at all. Grimm's Law is not a vibe. It is a table, and it has been a table since 1822.
 
-So this is a table. 127 of them, plus 103 rules for turning spelling into sound. (The front page quotes that number straight from the ruleset, so it cannot go stale.)
+So this is a table. 129 of them, plus 103 rules for turning spelling into sound. (A test asserts that number against the actual ruleset, because it drifted three times in one afternoon before one did.)
 
 The difference matters in practice, not just in principle:
 
@@ -64,7 +64,7 @@ The Germanic chain is the one to trust. The Latinate chain gets the endings and 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 92 tests
+npm test         # 97 tests
 npm run build
 ```
 
