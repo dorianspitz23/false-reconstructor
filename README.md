@@ -68,7 +68,7 @@ The Germanic chain is still the one to trust. The Latinate chain gets the conson
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 98 tests
+npm test
 npm run build
 ```
 
