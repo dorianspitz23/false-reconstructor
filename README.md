@@ -2,7 +2,7 @@
 
 **Type a word English never had. Watch real historical sound laws run backwards through it — Early Modern English, Middle English, Old English, Proto-West Germanic, Proto-Germanic, all the way to Proto-Indo-European.**
 
-[**Try it →**](https://dorianspitz23.github.io/false-reconstructor/)
+[**Try it →**](https://falsereconstructor.github.io/)
 
 ![The word flarn traced back through Old English flærn to Proto-Indo-European *plórnos-](public/social.png)
 
